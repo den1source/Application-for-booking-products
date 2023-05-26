@@ -10,35 +10,66 @@
 
     <EditText
         android:id="@+id/user"
-        android:layout_width="191dp"
+        android:layout_width="234dp"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="39dp"
         android:hint="Имя пользователя"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/result_main_activity" />
+
+    <Button
+        android:id="@+id/enter_check"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:onClick="enter_to_app"
+        android:text="Войти"
+        app:layout_constraintBottom_toTopOf="@+id/registr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <Button
+        android:id="@+id/enter_admin"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="317dp"
+        android:text="Для администратора"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registr" />
+
+    <Button
+        android:id="@+id/registr"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:text="Регистрация"
+        app:layout_constraintBottom_toTopOf="@+id/enter_admin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_check" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="195dp"
+        android:layout_width="227dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="63dp"
+        android:ems="10"
         android:hint="Пароль"
-        app:layout_constraintBottom_toTopOf="@+id/enter"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/enter_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user" />
 
-    <Button
-        android:id="@+id/enter"
-        android:layout_width="187dp"
+    <TextView
+        android:id="@+id/result_main_activity"
+        android:layout_width="236dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="401dp"
-        android:text="Войти"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="41dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
