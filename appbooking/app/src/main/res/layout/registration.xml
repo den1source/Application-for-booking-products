@@ -5,22 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:layout_editor_absoluteX="6dp"
-    tools:layout_editor_absoluteY="72dp">
-
-    <Button
-        android:id="@+id/registration_butt"
-        android:layout_width="218dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="307dp"
-        android:text="Зарегистрироваться"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/result_TEXT"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_password_enter"
-        tools:ignore="TouchTargetSizeCheck" />
+    tools:layout_editor_absoluteX="-6dp"
+    tools:layout_editor_absoluteY="30dp">
 
     <TextView
         android:id="@+id/result_TEXT"
@@ -29,36 +15,18 @@
         android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/editTextNumber"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/reg_user"
-        android:layout_width="235dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:hint="Имя пользователя (Логин)"
         app:layout_constraintBottom_toTopOf="@+id/reg_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/reg_password_enter"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/reg_password"
+        app:layout_constraintStart_toStartOf="@+id/reg_password"
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
-
-    <EditText
-        android:id="@+id/reg_password"
-        android:layout_width="235dp"
-        android:layout_height="0dp"
-        android:ems="10"
-        android:hint="Пароль"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/reg_password_enter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/reg_user"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_user" />
 
     <EditText
         android:id="@+id/reg_password_enter"
@@ -69,43 +37,84 @@
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/registration_butt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_password" />
+
+    <Button
+        android:id="@+id/registration_butt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="253dp"
+        android:text="Зарегистрироваться"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/reg_password_enter"
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
+        app:layout_constraintTop_toBottomOf="@+id/reg_password_enter"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/reg_password"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:ems="10"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/reg_password_enter"
+        app:layout_constraintEnd_toEndOf="@+id/reg_password_enter"
+        app:layout_constraintStart_toStartOf="@+id/reg_password_enter"
+        app:layout_constraintTop_toBottomOf="@+id/reg_user" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="14dp" />
 
     <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="234dp"
+        android:id="@+id/editTextLastName"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
         android:ems="10"
-        android:hint="Ваше ФИО"
+        android:hint="Фамилия"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/reg_user"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/reg_password"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editTextName"
+        app:layout_constraintEnd_toEndOf="@+id/reg_password_enter"
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
     <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="231dp"
+        android:id="@+id/editTextName"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:ems="10"
-        android:hint="Ваш возраст"
+        android:hint="Имя"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/reg_user"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
+        app:layout_constraintStart_toStartOf="@+id/reg_password_enter"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:ems="10"
+        android:hint="Возраст"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/editTextName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editTextName"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLastName"
+        app:layout_constraintEnd_toEndOf="@+id/reg_user"
+        app:layout_constraintStart_toStartOf="@+id/result_TEXT"
         app:layout_constraintTop_toBottomOf="@+id/result_TEXT" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,11 +8,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
-    TextView log, password, res;
+public class MainActivity extends AppCompatActivity {
+    add_data_for_registration check_data= new add_data_for_registration();
+    EditText log, password;
+    TextView res;
     Button button;
 
     @SuppressLint("MissingInflatedId")
@@ -47,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void enter_to_app(View view){
-        button=findViewById(R.id.registr);
+    public void enter_to_app(View v) throws SQLException, ClassNotFoundException, ExecutionException, InterruptedException {
+        button=findViewById(R.id.enter_check);
         log = findViewById(R.id.user);
         password = findViewById(R.id.password);
         res=findViewById(R.id.result_main_activity);
@@ -58,15 +62,16 @@ public class MainActivity extends AppCompatActivity {
             res.setTextColor(Color.RED);
         }
         else {
-            res.setText("ОК");//изменить!!!
-            /*View.OnClickListener listener = new View.OnClickListener() {//кнопка регистрация
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MainActivity.this, Registration.class);
-                    startActivityForResult(i, 0);
-                }
-            };
-            button.setOnClickListener(listener);*/
+            if(check_data.check_pass_log(password.getText().toString(), log.getText().toString())){
+                res.setText("");
+                Intent i = new Intent(MainActivity.this, Menu.class);
+                startActivityForResult(i, 0);
+            }
+            else {
+                res.setText("Нет такого пользователя(");//изменить!!!
+                res.setTextColor(Color.RED);
+            }
+
         }
     }
 }
