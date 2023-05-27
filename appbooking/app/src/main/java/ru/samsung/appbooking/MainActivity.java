@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             res.setTextColor(Color.RED);
         }
         else {
-            if(check_data.check_pass_log(password.getText().toString(), log.getText().toString())){
+            /*if(check_data.check_pass_log(password.getText().toString(), log.getText().toString())){
                 res.setText("");
                 Intent i = new Intent(MainActivity.this, Menu.class);
                 startActivityForResult(i, 0);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 res.setText("Нет такого пользователя(");//изменить!!!
                 res.setTextColor(Color.RED);
-            }
+            }*/
 
         }
     }
