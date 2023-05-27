@@ -26,12 +26,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/*result_out.setText("");
-                                Intent intent = new Intent(Registration.this, MainActivity.class);
-                                intent.putExtra("password", password.getText().toString());
-                                intent.putExtra("log", log.getText().toString());
-                                setResult(RESULT_OK, intent);
-                                finish();*/
 public class Registration extends AppCompatActivity {
     EditText name, last_name, year, log, password, password_first;
     TextView result_out;

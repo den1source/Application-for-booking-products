@@ -12,6 +12,7 @@
         android:id="@+id/user"
         android:layout_width="234dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
         android:hint="Имя пользователя"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,18 +28,7 @@
         app:layout_constraintBottom_toTopOf="@+id/registr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <Button
-        android:id="@+id/enter_admin"
-        android:layout_width="187dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="317dp"
-        android:text="Для администратора"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registr" />
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
     <Button
         android:id="@+id/registr"
@@ -50,14 +40,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_check" />
 
+    <Button
+        android:id="@+id/enter_admin"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="255dp"
+        android:text="Для администратора"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registr" />
+
     <EditText
         android:id="@+id/password"
         android:layout_width="227dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="13dp"
         android:ems="10"
         android:hint="Пароль"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/enter_check"
+        app:layout_constraintBottom_toTopOf="@+id/switch1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user" />
@@ -71,4 +73,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="233dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="18dp"
+        android:text="Запомнить пароль и логин?"
+        app:layout_constraintBottom_toTopOf="@+id/enter_check"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 </androidx.constraintlayout.widget.ConstraintLayout>
