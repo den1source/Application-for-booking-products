@@ -5,3 +5,41 @@ SELECT * FROM table_of_users
 #ТАБЛИЦА АДМИНОВ
 CREATE TABLE table_of_admins(ID INT PRIMARY KEY NOT NULL, LOGIN_OF_USER TEXT NOT NULL, PASSWORD_OF_USER TEXT NOT NULL);
 INSERT INTO table_of_admins(ID,LOGIN_OF_USER,PASSWORD_OF_USER) VALUES (0, 'adm0', '123');
+================================
+#ТАБЛИЦА ВИДОВ ПРОДУКТОВ
+CREATE TABLE types_of_products(ID INT PRIMARY KEY NOT NULL,VID TEXT NOT NULL);
+INSERT INTO types_of_products(ID,VID) VALUES(0,'Хлеб');
+INSERT INTO types_of_products(ID,VID) VALUES(1,'Сэндвич');
+INSERT INTO types_of_products(ID,VID) VALUES(2,'Пицца');
+INSERT INTO types_of_products(ID,VID) VALUES(3,'Торт');
+INSERT INTO types_of_products(ID,VID) VALUES(4,'Пирог');
+
+================================
+#ТАБЛИЦА ТОВАРОВ
+CREATE TABLE table_of_products(ID INT PRIMARY KEY NOT NULL,VID INT NOT NULL REFERENCES types_of_products (id) ,TYPE TEXT NOT NULL, PRICE FLOAT NOT NULL, TIME INT NOT NULL);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (0,0,'Белый хлеб', 70, 15);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (1,0,'Бородинский хлеб', 60, 15);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (2,0,'Нарезной батон', 50, 15);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (3,0,'Французский багет', 90, 15);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (4,0,'Черный хлеб', 80, 15);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (5,1,'C ветчиной', 80, 10);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (6,1,'C курицей', 90, 10);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (7,1,'C малиновым джемом', 70, 10);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (8,1,'C грибами и сыром', 80, 10);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (9,1,'C грибами и соусом', 75, 10);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (10,2,'Ветчина и сыр', 330, 45);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (11,2,'Четыре сыра', 350, 35);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (12,2,'Салями', 330, 45);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (13,2,'Курица и грибы', 350, 55);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (14,2,'Маргарита', 300, 45);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (15,3,'Медовый', 280, 90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (16,3,'Наполеон', 260, 90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (17,3,'Шоколадный фондан', 300,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (18,3,'Чизкейк', 170,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (19,3,'Тарталетка фруктовая', 80,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (20,4,'С капустой', 250,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (21,4,'С мясом', 350,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (22,4,'С картофелем и грибами', 300,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (23,4,'С вишней', 300,90);
+INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (24,4,'С яблоком', 320,90);
+SELECT * FROM table_of_products;

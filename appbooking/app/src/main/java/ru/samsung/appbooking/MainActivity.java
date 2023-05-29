@@ -30,25 +30,25 @@ public class MainActivity extends AppCompatActivity {
     TextView res1;
     Button button;
     Switch save;
+    static int c;
+    Thread th1,th2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button=findViewById(R.id.registr);
-        save=findViewById(R.id.switch1);
+        button = findViewById(R.id.registr);
+        save = findViewById(R.id.switch1);
         log = findViewById(R.id.user);
         password = findViewById(R.id.password);
-        res1=findViewById(R.id.result_main_activity);
+        res1 = findViewById(R.id.result_main_activity);
 
 
-
-        if(UserDataManager.getSavedLogin(MainActivity.this) != ""){
+        if (UserDataManager.getSavedLogin(MainActivity.this) != "") {
             save.setChecked(true);
             log.setText(UserDataManager.getSavedLogin(MainActivity.this));
             password.setText(UserDataManager.getSavedPassword(MainActivity.this));
-        }
-        else {
+        } else {
             save.setChecked(false);
         }
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && log!=null && password!=null) {
+                if (isChecked && log != null && password != null) {
                     String login = log.getText().toString();
                     String password1 = password.getText().toString();
                     UserDataManager.saveUserData(MainActivity.this, login, password1);
@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case RESULT_OK:
-            {
+            case RESULT_OK: {
                 log.setText(data.getStringExtra("log"));
                 password.setText(data.getStringExtra("password"));
                 break;
@@ -90,17 +89,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void enter_to_app(View v) throws SQLException, ClassNotFoundException, ExecutionException, InterruptedException {
-        button=findViewById(R.id.enter_check);
+        button = findViewById(R.id.enter_check);
         log = findViewById(R.id.user);
         password = findViewById(R.id.password);
-        res1=findViewById(R.id.result_main_activity);
-        if(log.length()==0 || password.length()==0){
+        res1 = findViewById(R.id.result_main_activity);
+        if (log.length() == 0 || password.length() == 0) {
             res1.setText("Введите логин/пароль");
             res1.setTextColor(Color.RED);
+            res1.setText("");
+            Intent i = new Intent(MainActivity.this, Main_menu.class);
+            startActivityForResult(i, 0);
+        } else {
+            th1=new Thread(() -> {
+                check_post_data(password.getText().toString(), log.getText().toString());
+            });
+            th2=new Thread(() -> {
+                num_types();
+            });
+            th2.start();
+            th1.start();
         }
-        else {
-            check_post_data(password.getText().toString(), log.getText().toString());
-        }
+    }
+
+    public void num_types() {
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/").newBuilder();
+        urlBuilder.addQueryParameter("what_do", "number_of_types");
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .cacheControl(new CacheControl.Builder().maxStale(30, TimeUnit.DAYS).build())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    String responseData = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            get_num(responseData);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void check_post_data(String login, String password) {
@@ -126,7 +168,11 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            processResponseData(responseData);
+                            try {
+                                processResponseData(responseData);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     });
                 }
@@ -139,10 +185,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void processResponseData(String responseData) {
+    public void processResponseData(String responseData) throws InterruptedException {
         if (responseData.equals("go")) {
+            th1.join();
+            th2.join();
             res1.setText("");
-            Intent i = new Intent(MainActivity.this, Menu.class);
+            Intent i = new Intent(MainActivity.this, Main_menu.class);
             startActivityForResult(i, 0);
         } else if (responseData.equals("no")) {
             res1.setText("Такого пользователя не существует");
@@ -150,4 +198,10 @@ public class MainActivity extends AppCompatActivity {
             res1.setText("Ошибка на стороне сервера(");
         }
     }
+
+    public void get_num(String responseData) {
+        c = Integer.parseInt(responseData);
+        //System.out.println("!!!!"+c);
+    }
+
 }

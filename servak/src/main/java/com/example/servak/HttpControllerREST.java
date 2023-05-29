@@ -26,19 +26,20 @@ public class HttpControllerREST extends HttpServlet {
                     return "good";
                 }
             }
-            case "enter_chk"->{
-                boolean cont=check_pass_log(request.getParameter("login"), request.getParameter("pass"),"table_of_users");
-                if(cont){
+            case "enter_chk" -> {
+                boolean cont = check_pass_log(request.getParameter("login"), request.getParameter("pass"), "table_of_users");
+                if (cont) {
                     return "go";
-                }
-                else return "no";
+                } else return "no";
             }
-            case "admin_chk"->{
-                boolean cont=check_pass_log(request.getParameter("login"), request.getParameter("pass"),"table_of_admins");
-                if(cont){
+            case "admin_chk" -> {
+                boolean cont = check_pass_log(request.getParameter("login"), request.getParameter("pass"), "table_of_admins");
+                if (cont) {
                     return "go";
-                }
-                else return "no";
+                } else return "no";
+            }
+            case "number_of_types" -> {
+                return get_numbers_lines("types_of_products", "vid");
             }
             default -> {
                 return "error";
@@ -46,6 +47,31 @@ public class HttpControllerREST extends HttpServlet {
         }
     }
 
+    private String get_numbers_lines(String t_n, String name_column) throws ClassNotFoundException, SQLException {
+        int c1 = 0;
+        ArrayList<String> arrayList = new ArrayList<>();
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + t_n);
+            while (rs.next()) {
+                String tt = rs.getString(name_column);
+                if (!arrayList.contains(tt)) arrayList.add(tt);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return String.valueOf(arrayList.size());
+    }
 
     public void add_data(String name, String last_name, int year, String login, String password) {
         Thread thread = new Thread(() -> {
@@ -98,7 +124,6 @@ public class HttpControllerREST extends HttpServlet {
     }
 
 
-
     public boolean check_pass_log(String pass, String login, String table) {
         try {
             return get_all_logins(table).contains(login) && get_all_password(table).contains(pass);
@@ -115,7 +140,7 @@ public class HttpControllerREST extends HttpServlet {
         ArrayList<String> pass_tt = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM "+t_n);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + t_n);
             while (rs.next()) {
                 String login = rs.getString("PASSWORD_OF_USER");
                 pass_tt.add(login);
@@ -140,7 +165,7 @@ public class HttpControllerREST extends HttpServlet {
         ArrayList<String> login_tt = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM "+t_n);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + t_n);
             while (rs.next()) {
                 String login = rs.getString("LOGIN_OF_USER");
                 login_tt.add(login);
@@ -165,7 +190,7 @@ public class HttpControllerREST extends HttpServlet {
         ArrayList<Long> id_tt = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM "+t_n);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + t_n);
             while (rs.next()) {
                 Long id = rs.getLong("ID");
                 id_tt.add(id);
