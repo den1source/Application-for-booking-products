@@ -3,9 +3,19 @@ package com.example.servak;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -13,6 +23,38 @@ import static java.lang.Integer.parseInt;
 
 @RestController
 public class HttpControllerREST extends HttpServlet {
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestBody byte[] imageBytes) {
+        // Здесь выполняется логика загрузки изображения
+        // imageBytes - массив байтов, представляющий загруженное изображение
+
+        // Возвращаем сообщение об успешной загрузке
+        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/download", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> downloadImage(HttpServletRequest request) throws IOException {
+        String str=request.getParameter("number");
+        byte[] imageBytes = imageToBytes("Data/Images/Types/"+"image.jpeg");
+        return ResponseEntity.ok().body(imageBytes);
+    }
+
+    public static byte[] imageToBytes(String imagePath) throws IOException {
+        File imageFile = new File(imagePath);
+        BufferedImage bufferedImage = ImageIO.read(imageFile);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+
+
+
+
+
 
     @RequestMapping("/")
     public String index(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException {
@@ -41,6 +83,7 @@ public class HttpControllerREST extends HttpServlet {
             case "number_of_types" -> {
                 return get_numbers_lines("types_of_products", "vid");
             }
+
             default -> {
                 return "error";
             }

@@ -8,7 +8,10 @@ public class ServakApplication {
 
     public static void main(String[] args) {
 
-         SpringApplication.run(ServakApplication.class, args);
+        new Thread(()->{
+            SpringApplication.run(ServakApplication.class, args);
+        }).start();
+
     }
 
 }
