@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    tools:context=".Main_menu">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -16,18 +18,12 @@
             android:id="@+id/scrollLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp" >
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="69dp"
-                android:background="@android:color/holo_green_light"
-                android:freezesText="true"
-                android:text="Меню:" />
+            <!-- Динамически добавленные ImageView будут размещаться здесь -->
+
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

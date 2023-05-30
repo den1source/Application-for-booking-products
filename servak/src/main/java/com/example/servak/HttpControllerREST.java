@@ -24,19 +24,18 @@ import static java.lang.Integer.parseInt;
 @RestController
 public class HttpControllerREST extends HttpServlet {
 
-    @PostMapping("/upload")
+    /*@PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestBody byte[] imageBytes) {
         // Здесь выполняется логика загрузки изображения
         // imageBytes - массив байтов, представляющий загруженное изображение
 
         // Возвращаем сообщение об успешной загрузке
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
-    }
+    }*/
 
-    @RequestMapping(value = "/download", produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> downloadImage(HttpServletRequest request) throws IOException {
-        String str=request.getParameter("number");
-        byte[] imageBytes = imageToBytes("Data/Images/Types/"+"image.jpeg");
+        byte[] imageBytes = imageToBytes("Data/Images/Types/"+request.getParameter("number")+".jpg");
         return ResponseEntity.ok().body(imageBytes);
     }
 
@@ -56,7 +55,7 @@ public class HttpControllerREST extends HttpServlet {
 
 
 
-    @RequestMapping("/")
+    @RequestMapping("/auth")
     public String index(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException {
         switch (request.getParameter("what_do")) {
             case "check_and_add_data" -> {

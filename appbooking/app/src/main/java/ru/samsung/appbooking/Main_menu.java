@@ -2,7 +2,6 @@ package ru.samsung.appbooking;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
@@ -17,54 +16,70 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 @SuppressLint("MissingInflatedId")
 public class Main_menu extends AppCompatActivity {
-    static int X = 10; // Здесь можно изменить значение `X` на желаемое количество картинок с кнопками
-    MainActivity mainActivity = new MainActivity();
+    int size,c; // Здесь можно изменить значение `X` на желаемое количество картинок с кнопками
+
+    public boolean checkImageFolder(String folderPath, int requiredImageCount) {
+        File folder = new File(folderPath);
+
+        // Проверяем, является ли путь директорией и существует ли директория
+        if (folder.isDirectory() && folder.exists()) {
+            // Создаем фильтр для файлов с расширением .jpg или .jpeg
+            FilenameFilter imageFilter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    String lowercaseName = name.toLowerCase();
+                    return lowercaseName.endsWith(".jpg") || lowercaseName.endsWith(".jpeg");
+                }
+            };
+
+            // Получаем список файлов изображений, отфильтрованных по расширению
+            File[] imageFiles = folder.listFiles(imageFilter);
+
+            // Проверяем количество изображений
+            if (imageFiles != null && imageFiles.length == requiredImageCount) {
+                // Количество изображений совпадает с требуемым числом
+                return true;
+            }
+        }
+
+        // Количество изображений не совпадает с требуемым числом или директория не найдена
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        X = MainActivity.c;
         setContentView(R.layout.activity_main_menu);
 
-        LinearLayout layout = findViewById(R.id.layout);
-        ScrollView scrollView = findViewById(R.id.scrollView);
-        LinearLayout scrollLayout = findViewById(R.id.scrollLayout);
-
-        for (int i = 0; i < X; i++) {
-            int finalI = i;
-            new Thread(()->{
-                FrameLayout frameLayout = createImageWithButton(finalI);
-                scrollLayout.addView(frameLayout);
-            }).start();
-        }
-
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
-    }
-
-
-    private FrameLayout createImageWithButton(final int imageIndex) {
         OkHttpClient client = new OkHttpClient();
-        String imageUrl = "http://10.0.2.2:8080/download"; // Замените на URL-адрес вашего изображения
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/auth").newBuilder();
+        urlBuilder.addQueryParameter("what_do", "number_of_types");
+        String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()
-                .url(imageUrl)
+                .url(url)
+                .cacheControl(new CacheControl.Builder().maxStale(30, TimeUnit.DAYS).build())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -72,21 +87,14 @@ public class Main_menu extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
-                }
-
-                InputStream inputStream = response.body().byteStream();
-                String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/"+imageIndex+".jpg";
-                try (FileOutputStream outputStream = new FileOutputStream(imagePath)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                    System.out.println("Image saved successfully.");
-                } catch (IOException e) {
-                    System.out.println("Failed to save image: " + e.getMessage());
-                } finally {
-                    inputStream.close();
+                } else {
+                    String responseData = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setSize(responseData);
+                        }
+                    });
                 }
             }
 
@@ -95,41 +103,112 @@ public class Main_menu extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void setSize(String res){//получить кол-во товаров
+        size=Integer.parseInt(res);
+        if(checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)),size)) start();
+        else {
+            for(int i=0;i<size;i++){
+                int finalI = i;
+                new Thread(()->{
+                    post_(finalI);
+                }).start();
+
+            }
+        }
+    }
 
 
-        FrameLayout frameLayout = new FrameLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, -50, 0, -360); // Устанавливаем отрицательный отступ снизу
-        frameLayout.setLayoutParams(layoutParams);
 
-        ImageView imageView = new ImageView(this);
-        FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imageView.setLayoutParams(imageLayoutParams);
+    public void post_(int imageIndex){
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
+        urlBuilder.addQueryParameter("number", String.valueOf(imageIndex));
+        String url = urlBuilder.build().toString();
 
-        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + imageIndex + ".jpg";
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        imageView.setImageBitmap(bitmap);
+        Request request = new Request.Builder()
+                .url(url)
+                .cacheControl(new CacheControl.Builder().maxStale(30, TimeUnit.DAYS).build())
+                .build();
 
-        frameLayout.addView(imageView);
-
-
-        Button button = new Button(this);
-        FrameLayout.LayoutParams buttonLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.gravity = Gravity.CENTER;
-        button.setLayoutParams(buttonLayoutParams);
-        button.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        button.setOnClickListener(new View.OnClickListener() {
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(Main_menu.this, "Нажата кнопка " + imageIndex, Toast.LENGTH_SHORT).show();
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    ResponseBody responseData = response.body();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            saveImage(responseData, String.valueOf(imageIndex));
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
             }
         });
-        frameLayout.addView(button);
-
-        return frameLayout;
     }
+
+    private void saveImage(ResponseBody responseData, String num) {
+        c++;
+        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + num + ".jpg";
+        File file = new File(imagePath);
+
+        try (OutputStream fos = new FileOutputStream(file)) {
+            // Сохраняем данные из ResponseBody в файл
+            fos.write(responseData.bytes());
+            fos.close();
+            Toast.makeText(Main_menu.this, "Image saved successfully.", Toast.LENGTH_SHORT).show();
+
+
+
+            if (c == size) {
+                start();
+            }
+        } catch (IOException e) {
+            Toast.makeText(Main_menu.this, "Failed to save image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    public void start() {
+
+        ScrollView scrollView = findViewById(R.id.scrollView);
+        LinearLayout scrollLayout = findViewById(R.id.scrollLayout);
+
+        for (int i = 0; i < size; i++) {
+            ImageView imageView = createImageView(i);
+            scrollLayout.addView(imageView);
+        }
+
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+    }
+
+    private ImageView createImageView(final int imageIndex) {
+        ImageView imageView = new ImageView(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 16, 0, 16);
+        imageView.setLayoutParams(layoutParams);
+
+        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + imageIndex + ".jpg";
+        Picasso.get().load(new File(imagePath)).into(imageView);
+
+        imageView.setOnClickListener(view -> {
+            Toast.makeText(Main_menu.this, "Нажата кнопка " + imageIndex, Toast.LENGTH_SHORT).show();
+        });
+
+        return imageView;
+    }
+
+
 
 }

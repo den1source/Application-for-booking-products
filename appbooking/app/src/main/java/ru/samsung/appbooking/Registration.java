@@ -74,7 +74,7 @@ public class Registration extends AppCompatActivity {
 
     public void check_post_data(String name, String last_name, int year, String login, String password) {
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/auth").newBuilder();
         urlBuilder.addQueryParameter("what_do", "check_and_add_data");
         urlBuilder.addQueryParameter("lastname", last_name);
         urlBuilder.addQueryParameter("name", name);

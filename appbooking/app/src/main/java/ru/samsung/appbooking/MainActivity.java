@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     TextView res1;
     Button button;
     Switch save;
-    static int c;
-    Thread th1,th2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         res1 = findViewById(R.id.result_main_activity);
 
-
         if (UserDataManager.getSavedLogin(MainActivity.this) != "") {
             save.setChecked(true);
             log.setText(UserDataManager.getSavedLogin(MainActivity.this));
@@ -51,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             save.setChecked(false);
         }
-
 
         save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -100,54 +96,15 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, Main_menu.class);
             startActivityForResult(i, 0);
         } else {
-            th1=new Thread(() -> {
-                check_post_data(password.getText().toString(), log.getText().toString());
-            });
-            th2=new Thread(() -> {
-                num_types();
-            });
-            th2.start();
-            th1.start();
+            check_post_data(password.getText().toString(), log.getText().toString());
         }
     }
 
-    public void num_types() {
-        OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/").newBuilder();
-        urlBuilder.addQueryParameter("what_do", "number_of_types");
-        String url = urlBuilder.build().toString();
 
-        Request request = new Request.Builder()
-                .url(url)
-                .cacheControl(new CacheControl.Builder().maxStale(30, TimeUnit.DAYS).build())
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                } else {
-                    String responseData = response.body().string();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            get_num(responseData);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     public void check_post_data(String login, String password) {
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/auth").newBuilder();
         urlBuilder.addQueryParameter("what_do", "enter_chk");
         urlBuilder.addQueryParameter("login", login);
         urlBuilder.addQueryParameter("pass", password);
@@ -187,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void processResponseData(String responseData) throws InterruptedException {
         if (responseData.equals("go")) {
-            th1.join();
-            th2.join();
             res1.setText("");
             Intent i = new Intent(MainActivity.this, Main_menu.class);
             startActivityForResult(i, 0);
@@ -197,11 +152,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             res1.setText("Ошибка на стороне сервера(");
         }
-    }
-
-    public void get_num(String responseData) {
-        c = Integer.parseInt(responseData);
-        //System.out.println("!!!!"+c);
     }
 
 }
