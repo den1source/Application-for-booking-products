@@ -1,16 +1,22 @@
 package ru.samsung.appbooking;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.Menu;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
+import com.squareup.picasso.Picasso;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -41,7 +47,7 @@ public class menu_products extends AppCompatActivity {
     ArrayList<String> price = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
 
-    private int c,size;
+    private int c, size;
     private AppBarConfiguration mAppBarConfiguration;
     private MenuProductsBinding binding;
     Main_menu main_menu = new Main_menu();
@@ -49,7 +55,33 @@ public class menu_products extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = MenuProductsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        setSupportActionBar(binding.appBarMenuProducts.toolbar);
+        binding.appBarMenuProducts.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu_products);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        fetchData();
+    }
+
+    private void fetchData() {
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/data").newBuilder();
         urlBuilder.addQueryParameter("what_do", "number_of_products");
@@ -86,34 +118,28 @@ public class menu_products extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
-
     }
 
-
-    public void processResponseData(String responseData) throws InterruptedException {
+    private void processResponseData(String responseData) throws InterruptedException {
         Gson gson = new Gson();
         ArrayList<String> arrayList = gson.fromJson(responseData, new TypeToken<ArrayList<String>>() {
         }.getType());
-        //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!"+arrayList);
-        size=arrayList.size();
+        size = arrayList.size();
         for (int i = 0; i < size; i += 3) {
             product.add(arrayList.get(i));
             price.add(arrayList.get(i + 1));
             time.add(arrayList.get(i + 2));
         }
 
-        for(int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             int finalI = i;
-            new Thread(()->{
+            new Thread(() -> {
                 post(finalI);
-            });
+            }).start();
         }
-
     }
 
-
-    public void post(int imageIndex) {
+    private void post(int imageIndex) {
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
         urlBuilder.addQueryParameter("what_do", "images_products");
@@ -135,7 +161,7 @@ public class menu_products extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new menu_products.ImageSaveTask().execute(responseData, String.valueOf(imageIndex));
+                            new ImageSaveTask().execute(responseData, String.valueOf(imageIndex));
                         }
                     });
                 }
@@ -180,30 +206,31 @@ public class menu_products extends AppCompatActivity {
         }
     }
 
-
     public void start_() {
-        binding = MenuProductsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        LinearLayout imageContainer = findViewById(R.id.imageContainer);
+        LinearLayout textContainer = findViewById(R.id.textContainer);
 
-        setSupportActionBar(binding.appBarMenuProducts.toolbar);
-        binding.appBarMenuProducts.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu_products);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        for (int i = 0; i < size; i++) {
+            ImageView imageView = new ImageView(this);
+            LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            imageLayoutParams.setMargins(0, 16, 0, 16);
+            imageView.setLayoutParams(imageLayoutParams);
+            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + i + ".jpg";
+            Picasso.get().load(new File(imagePath)).into(imageView);
+            imageContainer.addView(imageView);
+
+            TextView textView = new TextView(this);
+            LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            textView.setLayoutParams(textLayoutParams);
+            textView.setText(product.get(i) + "\n" + price.get(i) + "\n" + time.get(i));
+            textContainer.addView(textView);
+        }
     }
 
 

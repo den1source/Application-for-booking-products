@@ -41,8 +41,10 @@ public class HttpControllerREST extends HttpServlet {
                 byte[] imageBytes = imageToBytes("Data/Images/Types/" + request.getParameter("number") + ".jpg");
                 return ResponseEntity.ok().body(imageBytes);
             }
+            
             case "images_products" -> {//выбор товара
                 byte[] imageBytes = imageToBytes("Data/Images/Products/" + request.getParameter("number") + ".jpg");
+                System.out.println("Data/Images/Products/" + request.getParameter("number") + ".jpg");
                 return ResponseEntity.ok().body(imageBytes);
             }
             default -> {
@@ -113,7 +115,7 @@ public class HttpControllerREST extends HttpServlet {
 
     private ArrayList<String> get_num_of_products(String str) throws SQLException, ClassNotFoundException {
         ArrayList<String> data = new ArrayList<>();
-        System.out.println(str);
+
         Class.forName("org.postgresql.Driver");
         Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
                 "denis21042", "JfWRQ5PG9iKn");
