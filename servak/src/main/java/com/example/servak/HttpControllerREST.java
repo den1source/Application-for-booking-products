@@ -113,17 +113,18 @@ public class HttpControllerREST extends HttpServlet {
 
     private ArrayList<String> get_num_of_products(String str) throws SQLException, ClassNotFoundException {
         ArrayList<String> data = new ArrayList<>();
-
+        System.out.println(str);
         Class.forName("org.postgresql.Driver");
         Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
                 "denis21042", "JfWRQ5PG9iKn");
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + "types_of_products" + " WHERE " + "vid" + "='" + str + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products WHERE vid='" + Integer.parseInt(str) + "'");
             while (rs.next()) {
-                data.add(rs.getString("vid"));
+                data.add(rs.getString("type"));
                 data.add(String.valueOf(rs.getFloat("price")));
                 data.add(String.valueOf(rs.getInt("time")));
+
             }
             rs.close();
             stmt.close();
@@ -135,7 +136,6 @@ public class HttpControllerREST extends HttpServlet {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        for(String str)
         return data;
     }
 

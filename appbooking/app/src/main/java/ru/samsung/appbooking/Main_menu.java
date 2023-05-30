@@ -40,12 +40,13 @@ import okhttp3.ResponseBody;
 
 @SuppressLint("MissingInflatedId")
 public class Main_menu extends AppCompatActivity {
-    int size,c;
+    private int size,c;
     static int num_of_type;
 
 
-    public void createAppBookingFolder() {
-        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/app_booking";
+
+    /*public void createAppBookingFolder() {
+        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/";
         File folder = new File(folderPath);
 
         if (!folder.exists()) {
@@ -57,7 +58,7 @@ public class Main_menu extends AppCompatActivity {
                 Log.e("CreateFolder", "Failed to create folder.");
             }
         }
-    }
+    }*/
 
     public boolean checkImageFolder(String folderPath, int requiredImageCount) {
         File folder = new File(folderPath);
@@ -135,8 +136,8 @@ public class Main_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer size) {
             Main_menu.this.size = size;
-            createAppBookingFolder();
-            if (checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)) + "/app_booking", size))
+
+            if (checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)) + "/", size))
                 start();
             else {
                 for (int i = 0; i < size; i++) {
@@ -194,7 +195,7 @@ public class Main_menu extends AppCompatActivity {
             num = (String) params[1];
             c++;
 
-            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/app_booking" + num + ".jpg";
+            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + num + ".jpg";
             File file = new File(imagePath);
 
             try (OutputStream fos = new FileOutputStream(file)) {
@@ -240,7 +241,7 @@ public class Main_menu extends AppCompatActivity {
         layoutParams.setMargins(0, 16, 0, 16);
         imageView.setLayoutParams(layoutParams);
 
-        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/app_booking" + imageIndex + ".jpg";
+        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + imageIndex + ".jpg";
         Picasso.get().load(new File(imagePath)).into(imageView);
 
         imageView.setOnClickListener(view -> {
