@@ -2,8 +2,10 @@ package ru.samsung.appbooking;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,22 @@ import okhttp3.ResponseBody;
 
 @SuppressLint("MissingInflatedId")
 public class Main_menu extends AppCompatActivity {
-    int size,c; // Здесь можно изменить значение `X` на желаемое количество картинок с кнопками
+    int size,c;
+
+    public void createAppBookingFolder() {
+        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/app_booking";
+        File folder = new File(folderPath);
+
+        if (!folder.exists()) {
+            if (folder.mkdirs()) {
+                // Папка успешно создана
+                Log.d("CreateFolder", "Folder created successfully.");
+            } else {
+                // Ошибка при создании папки
+                Log.e("CreateFolder", "Failed to create folder.");
+            }
+        }
+    }
 
     public boolean checkImageFolder(String folderPath, int requiredImageCount) {
         File folder = new File(folderPath);
@@ -92,7 +109,7 @@ public class Main_menu extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            setSize(responseData);
+                            new SizeTask().execute(responseData);
                         }
                     });
                 }
@@ -105,23 +122,31 @@ public class Main_menu extends AppCompatActivity {
         });
     }
 
-    public void setSize(String res){//получить кол-во товаров
-        size=Integer.parseInt(res);
-        if(checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)),size)) start();
-        else {
-            for(int i=0;i<size;i++){
-                int finalI = i;
-                new Thread(()->{
-                    post_(finalI);
-                }).start();
+    private class SizeTask extends AsyncTask<String, Void, Integer> {
+        @Override
+        protected Integer doInBackground(String... params) {
+            String res = params[0];
+            return Integer.parseInt(res);
+        }
 
+        @Override
+        protected void onPostExecute(Integer size) {
+            Main_menu.this.size = size;
+            createAppBookingFolder();
+            if (checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)) + "/app_booking", size))
+                start();
+            else {
+                for (int i = 0; i < size; i++) {
+                    final int finalI = i;
+                    new Thread(() -> {
+                        post_(finalI);
+                    }).start();
+                }
             }
         }
     }
 
-
-
-    public void post_(int imageIndex){
+    public void post_(int imageIndex) {
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
         urlBuilder.addQueryParameter("number", String.valueOf(imageIndex));
@@ -142,11 +167,12 @@ public class Main_menu extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            saveImage(responseData, String.valueOf(imageIndex));
+                            new ImageSaveTask().execute(responseData, String.valueOf(imageIndex));
                         }
                     });
                 }
             }
+
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -154,35 +180,45 @@ public class Main_menu extends AppCompatActivity {
         });
     }
 
-    private void saveImage(ResponseBody responseData, String num) {
-        c++;
-        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + num + ".jpg";
-        File file = new File(imagePath);
+    private class ImageSaveTask extends AsyncTask<Object, Void, Void> {
+        private ResponseBody responseData;
+        private String num;
 
-        try (OutputStream fos = new FileOutputStream(file)) {
-            // Сохраняем данные из ResponseBody в файл
-            fos.write(responseData.bytes());
-            fos.close();
-            Toast.makeText(Main_menu.this, "Image saved successfully.", Toast.LENGTH_SHORT).show();
+        @Override
+        protected Void doInBackground(Object... params) {
+            responseData = (ResponseBody) params[0];
+            num = (String) params[1];
+            c++;
 
+            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/app_booking" + num + ".jpg";
+            File file = new File(imagePath);
 
+            try (OutputStream fos = new FileOutputStream(file)) {
+                // Сохраняем данные из ResponseBody в файл
+                fos.write(responseData.bytes());
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
             if (c == size) {
                 start();
             }
-        } catch (IOException e) {
-            Toast.makeText(Main_menu.this, "Failed to save image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         }
     }
 
 
-
-
     public void start() {
-
         ScrollView scrollView = findViewById(R.id.scrollView);
         LinearLayout scrollLayout = findViewById(R.id.scrollLayout);
+
+        // Очищаем scrollLayout
+        scrollLayout.removeAllViews();
 
         for (int i = 0; i < size; i++) {
             ImageView imageView = createImageView(i);
@@ -192,6 +228,7 @@ public class Main_menu extends AppCompatActivity {
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 
+
     private ImageView createImageView(final int imageIndex) {
         ImageView imageView = new ImageView(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -199,7 +236,7 @@ public class Main_menu extends AppCompatActivity {
         layoutParams.setMargins(0, 16, 0, 16);
         imageView.setLayoutParams(layoutParams);
 
-        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + imageIndex + ".jpg";
+        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/app_booking" + imageIndex + ".jpg";
         Picasso.get().load(new File(imagePath)).into(imageView);
 
         imageView.setOnClickListener(view -> {
@@ -208,7 +245,4 @@ public class Main_menu extends AppCompatActivity {
 
         return imageView;
     }
-
-
-
 }
