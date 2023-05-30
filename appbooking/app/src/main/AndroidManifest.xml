@@ -20,6 +20,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".menu_products"
+            android:exported="false"
+            android:label="@string/title_activity_menu_products"
+            android:theme="@style/Theme.AppBooking.NoActionBar" />
+        <activity
             android:name=".Main_menu"
             android:exported="false" />
         <activity

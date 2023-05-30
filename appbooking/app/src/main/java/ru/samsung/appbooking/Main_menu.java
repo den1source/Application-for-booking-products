@@ -1,6 +1,7 @@
 package ru.samsung.appbooking;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import okhttp3.ResponseBody;
 @SuppressLint("MissingInflatedId")
 public class Main_menu extends AppCompatActivity {
     int size,c;
+    static int num_of_type;
+
 
     public void createAppBookingFolder() {
         String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/app_booking";
@@ -149,6 +152,7 @@ public class Main_menu extends AppCompatActivity {
     public void post_(int imageIndex) {
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
+        urlBuilder.addQueryParameter("what_do", "images_menu");
         urlBuilder.addQueryParameter("number", String.valueOf(imageIndex));
         String url = urlBuilder.build().toString();
 
@@ -240,9 +244,16 @@ public class Main_menu extends AppCompatActivity {
         Picasso.get().load(new File(imagePath)).into(imageView);
 
         imageView.setOnClickListener(view -> {
-            Toast.makeText(Main_menu.this, "Нажата кнопка " + imageIndex, Toast.LENGTH_SHORT).show();
+            //.makeText(Main_menu.this, "Нажата кнопка " + imageIndex, Toast.LENGTH_SHORT).show();
+            num_of_type=imageIndex;
+            Intent i = new Intent(Main_menu.this, menu_products.class);
+            startActivityForResult(i, 0);
         });
 
         return imageView;
+    }
+
+    public int get_image_index(){
+        return num_of_type;
     }
 }

@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     Switch save;
 
+    static String login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void processResponseData(String responseData) throws InterruptedException {
         if (responseData.equals("go")) {
+
+            login=log.getText().toString();
+
             res1.setText("");
             Intent i = new Intent(MainActivity.this, Main_menu.class);
             startActivityForResult(i, 0);

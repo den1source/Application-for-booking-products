@@ -1,5 +1,6 @@
 package com.example.servak;
 
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,8 +36,20 @@ public class HttpControllerREST extends HttpServlet {
 
     @RequestMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> downloadImage(HttpServletRequest request) throws IOException {
-        byte[] imageBytes = imageToBytes("Data/Images/Types/"+request.getParameter("number")+".jpg");
-        return ResponseEntity.ok().body(imageBytes);
+        switch (request.getParameter("what_do")) {
+            case "images_menu" -> {//главное меню
+                byte[] imageBytes = imageToBytes("Data/Images/Types/" + request.getParameter("number") + ".jpg");
+                return ResponseEntity.ok().body(imageBytes);
+            }
+            case "images_products" -> {//выбор товара
+                byte[] imageBytes = imageToBytes("Data/Images/Products/" + request.getParameter("number") + ".jpg");
+                return ResponseEntity.ok().body(imageBytes);
+            }
+            default -> {
+                byte[] imageBytes = imageToBytes("Data/Images/Errors/" + 0 + ".jpg");
+                return ResponseEntity.ok().body(imageBytes);
+            }
+        }
     }
 
     public static byte[] imageToBytes(String imagePath) throws IOException {
@@ -49,8 +62,18 @@ public class HttpControllerREST extends HttpServlet {
         return byteArrayOutputStream.toByteArray();
     }
 
-
-
+    @RequestMapping("/data")
+    public ResponseEntity<String> post_data(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        switch (request.getParameter("what_do")) {
+            case "number_of_products":
+                ArrayList<String> products = get_num_of_products(request.getParameter("num"));
+                return ResponseEntity.ok().body(new Gson().toJson(products));
+            default:
+                ArrayList<String> arr = new ArrayList<>();
+                arr.add("0");
+                return ResponseEntity.ok().body(new Gson().toJson(arr));
+        }
+    }
 
 
 
@@ -82,11 +105,38 @@ public class HttpControllerREST extends HttpServlet {
             case "number_of_types" -> {
                 return get_numbers_lines("types_of_products", "vid");
             }
-
             default -> {
                 return "error";
             }
         }
+    }
+
+    private ArrayList<String> get_num_of_products(String str) throws SQLException, ClassNotFoundException {
+        ArrayList<String> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + "types_of_products" + " WHERE " + "vid" + "='" + str + "'");
+            while (rs.next()) {
+                data.add(rs.getString("vid"));
+                data.add(String.valueOf(rs.getFloat("price")));
+                data.add(String.valueOf(rs.getInt("time")));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        for(String str)
+        return data;
     }
 
     private String get_numbers_lines(String t_n, String name_column) throws ClassNotFoundException, SQLException {
