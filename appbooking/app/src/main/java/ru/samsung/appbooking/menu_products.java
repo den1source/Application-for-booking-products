@@ -38,7 +38,7 @@ public class menu_products extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.menu_products);
         fetchData();
     }
 
@@ -171,11 +171,12 @@ public class menu_products extends AppCompatActivity {
     }
 
     public void start_() {
-        setContentView(R.layout.menu_products);
+
         for(int i=0;i<size;i++){
             data_for_adapters.add(new data_for_adapter(product.get(i), price.get(i),time.get(i),ids.get(i),getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ids.get(i)+".jpg"));
         }
-        RecyclerView recyclerView = findViewById(R.id.menu_product);
+
+        RecyclerView recyclerView = findViewById(R.id.list);
         Adapter adapter=new Adapter(this, data_for_adapters);
 
         recyclerView.setAdapter(adapter);

@@ -35,8 +35,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(Adapter.ViewHolder holder, int position) {
         data_for_adapter data_for_adapters = product.get(position);
         System.out.println("!!!!"+data_for_adapters.getName());
-        //holder.View_image.setImageResource(R.drawable.image);
-        Picasso.get().load(new File(data_for_adapters.getPath())).into(holder.View_image);
+        //Picasso.get().load(new File(data_for_adapters.getPath())).into(holder.View_image);
+        holder.View_image.setImageResource(R.drawable.image);
         holder.nameView.setText(data_for_adapters.getName());
         holder.priceView.setText(data_for_adapters.getPrice());
         holder.timeView.setText(data_for_adapters.getTime());
