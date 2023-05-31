@@ -41,7 +41,7 @@ public class HttpControllerREST extends HttpServlet {
                 byte[] imageBytes = imageToBytes("Data/Images/Types/" + request.getParameter("number") + ".jpg");
                 return ResponseEntity.ok().body(imageBytes);
             }
-            
+
             case "images_products" -> {//выбор товара
                 byte[] imageBytes = imageToBytes("Data/Images/Products/" + request.getParameter("number") + ".jpg");
                 System.out.println("Data/Images/Products/" + request.getParameter("number") + ".jpg");
@@ -76,8 +76,6 @@ public class HttpControllerREST extends HttpServlet {
                 return ResponseEntity.ok().body(new Gson().toJson(arr));
         }
     }
-
-
 
 
     @RequestMapping("/auth")
@@ -123,6 +121,7 @@ public class HttpControllerREST extends HttpServlet {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products WHERE vid='" + Integer.parseInt(str) + "'");
             while (rs.next()) {
+                data.add(String.valueOf(rs.getInt("id")));
                 data.add(rs.getString("type"));
                 data.add(String.valueOf(rs.getFloat("price")));
                 data.add(String.valueOf(rs.getInt("time")));
@@ -138,7 +137,9 @@ public class HttpControllerREST extends HttpServlet {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
+        System.out.println(data);
         return data;
+
     }
 
     private String get_numbers_lines(String t_n, String name_column) throws ClassNotFoundException, SQLException {

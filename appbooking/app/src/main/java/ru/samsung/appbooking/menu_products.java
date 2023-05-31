@@ -1,29 +1,13 @@
 package ru.samsung.appbooking;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
-import android.view.Menu;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,43 +24,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import ru.samsung.appbooking.databinding.MenuProductsBinding;
 
 public class menu_products extends AppCompatActivity {
     ArrayList<String> product = new ArrayList<>();
     ArrayList<String> price = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
+    ArrayList<Integer> ids=new ArrayList<>();
 
     private int c, size;
-    private AppBarConfiguration mAppBarConfiguration;
-    private MenuProductsBinding binding;
     Main_menu main_menu = new Main_menu();
+    ArrayList<data_for_adapter> data_for_adapters=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = MenuProductsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.appBarMenuProducts.toolbar);
-        binding.appBarMenuProducts.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu_products);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
 
         fetchData();
     }
@@ -125,13 +86,15 @@ public class menu_products extends AppCompatActivity {
         ArrayList<String> arrayList = gson.fromJson(responseData, new TypeToken<ArrayList<String>>() {
         }.getType());
         size = arrayList.size();
-        for (int i = 0; i < size; i += 3) {
-            product.add(arrayList.get(i));
-            price.add(arrayList.get(i + 1));
-            time.add(arrayList.get(i + 2));
+        for (int i = 0; i < size; i += 4) {
+            ids.add(Integer.valueOf(arrayList.get(i)));
+            product.add(arrayList.get(i+1));
+            price.add(arrayList.get(i + 2));
+            time.add(arrayList.get(i + 3));
         }
 
-        for (int i = 0; i < size; i++) {
+
+        for(int i:ids){
             int finalI = i;
             new Thread(() -> {
                 post(finalI);
@@ -202,49 +165,23 @@ public class menu_products extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             if (c == size) {
                 start_();
+
             }
         }
     }
 
     public void start_() {
-        LinearLayout imageContainer = findViewById(R.id.imageContainer);
-        LinearLayout textContainer = findViewById(R.id.textContainer);
-
-        for (int i = 0; i < size; i++) {
-            ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            imageLayoutParams.setMargins(0, 16, 0, 16);
-            imageView.setLayoutParams(imageLayoutParams);
-            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + i + ".jpg";
-            Picasso.get().load(new File(imagePath)).into(imageView);
-            imageContainer.addView(imageView);
-
-            TextView textView = new TextView(this);
-            LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            textView.setLayoutParams(textLayoutParams);
-            textView.setText(product.get(i) + "\n" + price.get(i) + "\n" + time.get(i));
-            textContainer.addView(textView);
+        setContentView(R.layout.menu_products);
+        for(int i=0;i<size;i++){
+            data_for_adapters.add(new data_for_adapter(product.get(i), price.get(i),time.get(i),ids.get(i),getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ids.get(i)+".jpg"));
         }
+        RecyclerView recyclerView = findViewById(R.id.menu_product);
+        Adapter adapter=new Adapter(this, data_for_adapters);
+
+        recyclerView.setAdapter(adapter);
+
+
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_products, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu_products);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
 }
