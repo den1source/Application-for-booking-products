@@ -46,7 +46,7 @@ public class Main_menu extends AppCompatActivity {
 
 
     /*public void createAppBookingFolder() {
-        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/";
+        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/images_for_menu";
         File folder = new File(folderPath);
 
         if (!folder.exists()) {
@@ -137,7 +137,7 @@ public class Main_menu extends AppCompatActivity {
         protected void onPostExecute(Integer size) {
             Main_menu.this.size = size;
 
-            if (checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)) + "/", size))
+            if (checkImageFolder(String.valueOf(getExternalFilesDir(Environment.DIRECTORY_PICTURES)) + "/images_for_menu", size))
                 start();
             else {
                 for (int i = 0; i < size; i++) {
@@ -195,7 +195,7 @@ public class Main_menu extends AppCompatActivity {
             num = (String) params[1];
             c++;
 
-            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + num + ".jpg";
+            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/images_for_menu" + num + ".jpg";
             File file = new File(imagePath);
 
             try (OutputStream fos = new FileOutputStream(file)) {
@@ -241,7 +241,7 @@ public class Main_menu extends AppCompatActivity {
         layoutParams.setMargins(0, 16, 0, 16);
         imageView.setLayoutParams(layoutParams);
 
-        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + imageIndex + ".jpg";
+        String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/images_for_menu" + imageIndex + ".jpg";
         Picasso.get().load(new File(imagePath)).into(imageView);
 
         imageView.setOnClickListener(view -> {

@@ -6,6 +6,8 @@ import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,16 +31,16 @@ public class menu_products extends AppCompatActivity {
     ArrayList<String> product = new ArrayList<>();
     ArrayList<String> price = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
-    ArrayList<Integer> ids=new ArrayList<>();
+    ArrayList<Integer> ids = new ArrayList<>();
 
     private int c, size;
     Main_menu main_menu = new Main_menu();
-    ArrayList<data_for_adapter> data_for_adapters=new ArrayList<>();
+    ArrayList<Data> datas = new ArrayList<Data>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_products);
+
         fetchData();
     }
 
@@ -88,13 +90,12 @@ public class menu_products extends AppCompatActivity {
         size = arrayList.size();
         for (int i = 0; i < size; i += 4) {
             ids.add(Integer.valueOf(arrayList.get(i)));
-            product.add(arrayList.get(i+1));
+            product.add(arrayList.get(i + 1));
             price.add(arrayList.get(i + 2));
             time.add(arrayList.get(i + 3));
         }
 
-
-        for(int i:ids){
+        for (int i : ids) {
             int finalI = i;
             new Thread(() -> {
                 post(finalI);
@@ -103,6 +104,7 @@ public class menu_products extends AppCompatActivity {
     }
 
     private void post(int imageIndex) {
+        c = 0;
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
         urlBuilder.addQueryParameter("what_do", "images_products");
@@ -124,6 +126,7 @@ public class menu_products extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            c++;
                             new ImageSaveTask().execute(responseData, String.valueOf(imageIndex));
                         }
                     });
@@ -145,13 +148,12 @@ public class menu_products extends AppCompatActivity {
         protected Void doInBackground(Object... params) {
             responseData = (ResponseBody) params[0];
             num = (String) params[1];
-            c++;
 
-            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + num + ".jpg";
+            String imagePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + num + ".jpg";
             File file = new File(imagePath);
 
             try (OutputStream fos = new FileOutputStream(file)) {
-                // Сохраняем данные из ResponseBody в файл
+                // Save data from ResponseBody to file
                 fos.write(responseData.bytes());
                 fos.close();
             } catch (IOException e) {
@@ -162,27 +164,24 @@ public class menu_products extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            if (c == size) {
-                start_();
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
 
+            if (c == (size/4)) {
+                start_();
             }
         }
     }
 
     public void start_() {
-
-        for(int i=0;i<size;i++){
-            data_for_adapters.add(new data_for_adapter(product.get(i), price.get(i),time.get(i),ids.get(i),getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ids.get(i)+".jpg"));
+        setContentView(R.layout.menu_products);
+        datas.clear();
+        for (int i = 0; i < (size/4); i++) {
+            datas.add(new Data(product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg"));
         }
 
         RecyclerView recyclerView = findViewById(R.id.list);
-        Adapter adapter=new Adapter(this, data_for_adapters);
-
+        DataAdapter adapter = new DataAdapter(this, datas);
         recyclerView.setAdapter(adapter);
-
-
     }
-
-
 }
