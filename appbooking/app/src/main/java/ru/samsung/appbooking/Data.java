@@ -5,6 +5,7 @@ public class Data {
     private String price;
     private String time;
     private String path;
+    private int Quantity;
     //private int imageResource;
 
     public Data(String name, String price, String time, String path) {
@@ -12,6 +13,7 @@ public class Data {
         this.price = price;
         this.time = time;
         this.path = path;
+        Quantity=0;
     }
 
     public String getTime() {
@@ -28,5 +30,13 @@ public class Data {
 
     public String getPath() {
         return path;
+    }
+
+    public int getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(int Quantity){
+        this.Quantity=Quantity;
     }
 }

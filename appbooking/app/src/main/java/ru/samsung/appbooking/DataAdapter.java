@@ -20,6 +20,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     private final LayoutInflater inflater;
     private final List<Data> datas;
 
+
     DataAdapter(Context context, List<Data> datas) {
         this.datas = datas;
         this.inflater = LayoutInflater.from(context);
@@ -27,7 +28,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     @Override
     public DataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = inflater.inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -41,14 +41,80 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         holder.priceView.setText(data.getPrice() + " руб.");
         holder.timeView.setText(data.getTime() + " мин.");
 
+        if (data.getQuantity() > 0) {
+            holder.quantityTextView.setText(String.valueOf(data.getQuantity()));
+            holder.quantityTextView.setVisibility(View.VISIBLE);
+            holder.minusButton.setVisibility(View.VISIBLE);
+            holder.checkButton.setVisibility(View.VISIBLE);
+            holder.plusButton.setVisibility(View.VISIBLE);
+            holder.button.setVisibility(View.GONE);
+        } else {
+            holder.quantityTextView.setVisibility(View.GONE);
+            holder.minusButton.setVisibility(View.GONE);
+            holder.checkButton.setVisibility(View.GONE);
+            holder.plusButton.setVisibility(View.GONE);
+            holder.button.setVisibility(View.VISIBLE);
+        }
+
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Data clickedData = datas.get(position);
-                    Toast.makeText(v.getContext(), "Button clicked for item: " + clickedData.getName(), Toast.LENGTH_SHORT).show();
-                    // Perform any other desired action with the clicked data
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    Data clickedData = datas.get(currentPosition);
+                    //Toast.makeText(v.getContext(), "Button clicked for item: " + clickedData.getName(), Toast.LENGTH_SHORT).show();
+                    clickedData.setQuantity(1);
+                    notifyDataSetChanged();
+                }
+            }
+        });
+
+        holder.plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    Data clickedData = datas.get(currentPosition);
+                    int quantity = clickedData.getQuantity();
+                    quantity++;
+                    clickedData.setQuantity(quantity);
+                    holder.quantityTextView.setText(String.valueOf(quantity));
+                    holder.minusButton.setVisibility(View.VISIBLE);
+                    holder.checkButton.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                }
+            }
+        });
+
+        holder.minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    Data clickedData = datas.get(currentPosition);
+                    int quantity = clickedData.getQuantity();
+                    quantity--;
+                    clickedData.setQuantity(quantity);
+                    holder.quantityTextView.setText(String.valueOf(quantity));
+
+                    if (quantity == 0) {
+                        holder.minusButton.setVisibility(View.GONE);
+                        holder.checkButton.setVisibility(View.GONE);
+                    }
+                    notifyDataSetChanged();
+                }
+            }
+        });
+
+        holder.checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    Data clickedData = datas.get(currentPosition);
+                    String name = clickedData.getName();
+                    int quantity = clickedData.getQuantity();
+                    Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -61,8 +127,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView imageView;
-        final TextView nameView, priceView, timeView;
-        final Button button;
+        final TextView nameView, priceView, timeView, quantityTextView;
+        final Button button, plusButton, minusButton, checkButton;
 
         ViewHolder(View view) {
             super(view);
@@ -71,6 +137,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             priceView = view.findViewById(R.id.price);
             timeView = view.findViewById(R.id.time);
             button = view.findViewById(R.id.button);
+            plusButton = view.findViewById(R.id.plusButton);
+            minusButton = view.findViewById(R.id.minusButton);
+            checkButton = view.findViewById(R.id.checkButton);
+            quantityTextView = view.findViewById(R.id.quantityTextView);
         }
     }
 }
