@@ -6,9 +6,11 @@ public class Data {
     private String time;
     private String path;
     private int Quantity;
+    private int id;
     //private int imageResource;
 
-    public Data(String name, String price, String time, String path) {
+    public Data(int id,String name, String price, String time, String path) {
+        this.id=id;
         this.name = name;
         this.price = price;
         this.time = time;
@@ -38,5 +40,8 @@ public class Data {
 
     public void setQuantity(int Quantity){
         this.Quantity=Quantity;
+    }
+    public int getId(){
+        return id;
     }
 }

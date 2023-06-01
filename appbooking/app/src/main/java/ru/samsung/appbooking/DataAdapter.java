@@ -14,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     private final LayoutInflater inflater;
     private final List<Data> datas;
+    ArrayList<String> name_product=new ArrayList<>();
+    ArrayList<Integer> id_product=new ArrayList<>();
 
 
     DataAdapter(Context context, List<Data> datas) {
@@ -100,6 +103,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     if (quantity == 0) {
                         holder.minusButton.setVisibility(View.GONE);
                         holder.checkButton.setVisibility(View.GONE);
+                        if(name_product.size()!=0){
+                            id_product.remove(id_product.indexOf(clickedData.getId()));
+                            name_product.remove(name_product.indexOf(clickedData.getName()));
+                            System.out.println("!!ids_after_delete: "+id_product);
+                            System.out.println("!!names_after_delete:"+name_product);
+                        }
                     }
                     notifyDataSetChanged();
                 }
@@ -115,6 +124,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     String name = clickedData.getName();
                     int quantity = clickedData.getQuantity();
                     Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
+                    id_product.add(clickedData.getId());
+                    name_product.add(clickedData.getName());
+                    System.out.println("!!ids: "+id_product);
+                    System.out.println("!!names:"+name_product);
                 }
             }
         });

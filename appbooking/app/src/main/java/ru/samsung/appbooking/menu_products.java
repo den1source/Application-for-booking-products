@@ -177,7 +177,7 @@ public class menu_products extends AppCompatActivity {
         setContentView(R.layout.menu_products);
         datas.clear();
         for (int i = 0; i < (size/4); i++) {
-            datas.add(new Data(product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg"));
+            datas.add(new Data(ids.get(i),product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg"));
         }
 
         RecyclerView recyclerView = findViewById(R.id.list);
