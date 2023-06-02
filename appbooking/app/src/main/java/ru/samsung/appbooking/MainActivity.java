@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             res1.setText("Введите логин/пароль");
             res1.setTextColor(Color.RED);
             res1.setText("");
-            Intent i = new Intent(MainActivity.this, Main_menu.class);
+            Intent i = new Intent(MainActivity.this, Main_Act_2.class);
             startActivityForResult(i, 0);
         } else {
             check_post_data(password.getText().toString(), log.getText().toString());
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             login=log.getText().toString();
 
             res1.setText("");
-            Intent i = new Intent(MainActivity.this, Main_menu.class);
+            Intent i = new Intent(MainActivity.this, Main_Act_2.class);
             startActivityForResult(i, 0);
         } else if (responseData.equals("no")) {
             res1.setText("Такого пользователя не существует");

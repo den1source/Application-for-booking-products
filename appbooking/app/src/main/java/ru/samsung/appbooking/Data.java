@@ -1,5 +1,7 @@
 package ru.samsung.appbooking;
 
+import android.content.Context;
+
 public class Data {
     private String name;
     private String price;
@@ -7,15 +9,17 @@ public class Data {
     private String path;
     private int Quantity;
     private int id;
+    private Context context;
     //private int imageResource;
 
-    public Data(int id,String name, String price, String time, String path) {
+    public Data(int id, String name, String price, String time, String path, Context context) {
         this.id=id;
         this.name = name;
         this.price = price;
         this.time = time;
         this.path = path;
         Quantity=0;
+        this.context=context;
     }
 
     public String getTime() {
@@ -43,5 +47,8 @@ public class Data {
     }
     public int getId(){
         return id;
+    }
+    public Context getContext(){
+        return context;
     }
 }

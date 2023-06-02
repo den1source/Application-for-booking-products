@@ -3,12 +3,17 @@ package ru.samsung.appbooking;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -36,6 +41,7 @@ public class menu_products extends AppCompatActivity {
     private int c, size;
     Main_menu main_menu = new Main_menu();
     ArrayList<Data> datas = new ArrayList<Data>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,13 +181,55 @@ public class menu_products extends AppCompatActivity {
 
     public void start_() {
         setContentView(R.layout.menu_products);
-        datas.clear();
-        for (int i = 0; i < (size/4); i++) {
-            datas.add(new Data(ids.get(i),product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg"));
+
+        datas.clear();//
+        Data_of_user_product data_w_r_=new Data_of_user_product();
+        data_w_r_.clear_arrays();//
+
+        if(data_w_r_.check_file(this)){
+            ArrayList<ArrayList<?>> data_from_file=data_w_r_.readArrayListFromFile(this);
+            ArrayList<Integer> list2 = (ArrayList<Integer>) data_from_file.get(1);
+
+            /*int sovpadenie=0;
+            for(int id:ids){
+                if(list2.contains(id)){
+                    sovpadenie++;
+                }
+            }
+            int s=0;
+            if(list2.size()!=sovpadenie){
+
+            }*/
+            int s=0;
+            for (int i = 0; i < size/4; i++) {
+                if(!list2.contains(ids.get(i))){
+                    s++;
+                    datas.add(new Data(ids.get(i),product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg", this));
+                }
+            }
+            if(s==0){
+                // Добавление текстового элемента
+                System.out.println("11111111111111111111222222");
+                TextView textView = findViewById(R.id.textView);
+                textView.setText("ВСЕ В КОРЗИНЕ!");
+            }
+            else {
+                RecyclerView recyclerView = findViewById(R.id.list);
+                DataAdapter adapter = new DataAdapter(this, datas);
+                recyclerView.setAdapter(adapter);
+            }
+        }
+        else {
+            System.out.println("!!!!!!!");
+            for (int i = 0; i < size/4; i++) {
+                datas.add(new Data(ids.get(i),product.get(i), price.get(i), time.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg", this));
+            }
+
+            RecyclerView recyclerView = findViewById(R.id.list);
+            DataAdapter adapter = new DataAdapter(this, datas);
+            recyclerView.setAdapter(adapter);
         }
 
-        RecyclerView recyclerView = findViewById(R.id.list);
-        DataAdapter adapter = new DataAdapter(this, datas);
-        recyclerView.setAdapter(adapter);
+
     }
 }

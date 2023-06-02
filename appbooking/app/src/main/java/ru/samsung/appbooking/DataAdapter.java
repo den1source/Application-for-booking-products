@@ -20,8 +20,8 @@ import java.util.List;
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     private final LayoutInflater inflater;
     private final List<Data> datas;
-    ArrayList<String> name_product=new ArrayList<>();
-    ArrayList<Integer> id_product=new ArrayList<>();
+    ArrayList<String> name_prd=new ArrayList<>();
+    Data_of_user_product data_w_r=new Data_of_user_product();
 
 
     DataAdapter(Context context, List<Data> datas) {
@@ -103,11 +103,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     if (quantity == 0) {
                         holder.minusButton.setVisibility(View.GONE);
                         holder.checkButton.setVisibility(View.GONE);
-                        if(name_product.size()!=0){
-                            id_product.remove(id_product.indexOf(clickedData.getId()));
-                            name_product.remove(name_product.indexOf(clickedData.getName()));
-                            System.out.println("!!ids_after_delete: "+id_product);
-                            System.out.println("!!names_after_delete:"+name_product);
+                        if(name_prd.size()!=0){
+                            name_prd.remove(name_prd.indexOf(clickedData.getName()));
+                            data_w_r.delete_product(clickedData.getName(), clickedData.getContext());
                         }
                     }
                     notifyDataSetChanged();
@@ -122,12 +120,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     Data clickedData = datas.get(currentPosition);
                     String name = clickedData.getName();
-                    int quantity = clickedData.getQuantity();
+                    //int quantity = clickedData.getQuantity();
                     Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
-                    id_product.add(clickedData.getId());
-                    name_product.add(clickedData.getName());
-                    System.out.println("!!ids: "+id_product);
-                    System.out.println("!!names:"+name_product);
+                    name_prd.add(clickedData.getName());
+                    data_w_r.add_product(clickedData.getName(), clickedData.getId(), clickedData.getQuantity(), Double.parseDouble(clickedData.getPrice()),clickedData.getContext());
                 }
             }
         });
