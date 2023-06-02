@@ -100,7 +100,7 @@ public class menu_products extends AppCompatActivity {
             price.add(arrayList.get(i + 2));
             time.add(arrayList.get(i + 3));
         }
-
+        c = 0;
         for (int i : ids) {
             int finalI = i;
             new Thread(() -> {
@@ -110,7 +110,7 @@ public class menu_products extends AppCompatActivity {
     }
 
     private void post(int imageIndex) {
-        c = 0;
+
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/image").newBuilder();
         urlBuilder.addQueryParameter("what_do", "images_products");
@@ -146,7 +146,7 @@ public class menu_products extends AppCompatActivity {
         });
     }
 
-    private class ImageSaveTask extends AsyncTask<Object, Void, Void> {
+    class ImageSaveTask extends AsyncTask<Object, Void, Void> {
         private ResponseBody responseData;
         private String num;
 
@@ -190,16 +190,6 @@ public class menu_products extends AppCompatActivity {
             ArrayList<ArrayList<?>> data_from_file=data_w_r_.readArrayListFromFile(this);
             ArrayList<Integer> list2 = (ArrayList<Integer>) data_from_file.get(1);
 
-            /*int sovpadenie=0;
-            for(int id:ids){
-                if(list2.contains(id)){
-                    sovpadenie++;
-                }
-            }
-            int s=0;
-            if(list2.size()!=sovpadenie){
-
-            }*/
             int s=0;
             for (int i = 0; i < size/4; i++) {
                 if(!list2.contains(ids.get(i))){

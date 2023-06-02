@@ -70,6 +70,9 @@ public class HttpControllerREST extends HttpServlet {
             case "number_of_products":
                 ArrayList<String> products = get_num_of_products(request.getParameter("num"));
                 return ResponseEntity.ok().body(new Gson().toJson(products));
+            case "get_id":
+                ArrayList<String> id = get_id_of_products(request.getParameter("num"));
+                return ResponseEntity.ok().body(new Gson().toJson(id));
             default:
                 ArrayList<String> arr = new ArrayList<>();
                 arr.add("0");
@@ -120,6 +123,37 @@ public class HttpControllerREST extends HttpServlet {
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products WHERE vid='" + Integer.parseInt(str) + "'");
+            while (rs.next()) {
+                data.add(String.valueOf(rs.getInt("id")));
+                data.add(rs.getString("type"));
+                data.add(String.valueOf(rs.getFloat("price")));
+                data.add(String.valueOf(rs.getInt("time")));
+
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println(data);
+        return data;
+
+    }
+
+    private ArrayList<String> get_id_of_products(String str) throws SQLException, ClassNotFoundException {
+        ArrayList<String> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products WHERE id='" + Integer.parseInt(str) + "'");
             while (rs.next()) {
                 data.add(String.valueOf(rs.getInt("id")));
                 data.add(rs.getString("type"));

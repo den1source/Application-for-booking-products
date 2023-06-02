@@ -13,51 +13,88 @@ import java.util.ArrayList;
 
 public class Data_of_user_product {
 
-    ArrayList<Integer> id_product=new ArrayList<>();
-    ArrayList<String> name_product=new ArrayList<>();
-    ArrayList<Integer> kol_vo=new ArrayList<>();
-    ArrayList<Double> sum=new ArrayList<>();
+    ArrayList<Integer> id_product = new ArrayList<>();
+    ArrayList<String> name_product = new ArrayList<>();
+    ArrayList<Integer> kol_vo = new ArrayList<>();
+    ArrayList<Double> sum = new ArrayList<>();
 
-    public ArrayList<String> getName_product(){
+    public ArrayList<String> getName_product() {
         return name_product;
     }
 
-    public void setName_product(ArrayList<String> Name_product){
-        this.name_product=Name_product;
+    public void setName_product(ArrayList<String> Name_product) {
+        this.name_product = Name_product;
     }
 
-    public ArrayList<Integer> getId_product(){
+    public ArrayList<Integer> getId_product() {
         return id_product;
     }
 
-    public void setId_product(ArrayList<Integer> id_product){
-        this.id_product=id_product;
+    public void setId_product(ArrayList<Integer> id_product) {
+        this.id_product = id_product;
     }
 
-    public void clear_arrays(){
+    public void clear_arrays() {
         name_product.clear();
         id_product.clear();
         kol_vo.clear();
         sum.clear();
     }
 
-    public void add_product(String name, int id, int kol_vo_, double price_of_product,Context context){
+    public void add_product(String name, int id, int kol_vo_, double price_of_product, Context context) {
+        name_product.clear();
+        id_product.clear();
+        kol_vo.clear();
+        sum.clear();
+
         name_product.add(name);
         id_product.add(id);
         kol_vo.add(kol_vo_);
-        sum.add((price_of_product)*kol_vo_);
+        sum.add((price_of_product) * kol_vo_);
 
-        writeArrayListToFile(name_product, id_product, kol_vo, sum,context);
+        writeArrayListToFile(name_product, id_product, kol_vo, sum, context);
     }
 
-    public void delete_product(String name, Context context){
-        int index=name_product.indexOf(name);
+
+    public void delete_product(String name, Context context) {
+        int index = name_product.indexOf(name);
         name_product.remove(index);
         id_product.remove(index);
         kol_vo.remove(index);
         sum.remove(index);
 
-        onlywriteArrayListToFile(name_product, id_product, kol_vo, sum,context);//перезапись
+        onlywriteArrayListToFile(name_product, id_product, kol_vo, sum, context);//перезапись
+    }
+
+    public void change(String name, int kol, double price, Context context) {
+        ArrayList<ArrayList<?>> data = readArrayListFromFile(context);
+        name_product = (ArrayList<String>) data.get(0);
+        id_product = (ArrayList<Integer>) data.get(1);
+        kol_vo = (ArrayList<Integer>) data.get(2);
+        sum = (ArrayList<Double>) data.get(3);
+
+        int index = name_product.indexOf(name);
+        kol_vo.set(index, kol);
+        sum.set(index, (kol * price));
+        onlywriteArrayListToFile(name_product, id_product, kol_vo, sum, context);
+
+
+    }
+
+    public void change_delete_product(String name,Context context){
+        ArrayList<ArrayList<?>> data = readArrayListFromFile(context);
+        name_product = (ArrayList<String>) data.get(0);
+        id_product = (ArrayList<Integer>) data.get(1);
+        kol_vo = (ArrayList<Integer>) data.get(2);
+        sum = (ArrayList<Double>) data.get(3);
+
+        int index = name_product.indexOf(name);
+
+        name_product.remove(index);
+        id_product.remove(index);
+        kol_vo.remove(index);
+        sum.remove(index);
+        onlywriteArrayListToFile(name_product, id_product, kol_vo, sum, context);
     }
 
     private void onlywriteArrayListToFile(ArrayList<String> list1, ArrayList<Integer> list2, ArrayList<Integer> list3, ArrayList<Double> list4, Context context) {
@@ -140,8 +177,6 @@ public class Data_of_user_product {
     }
 
 
-
-
     public static ArrayList<ArrayList<?>> readArrayListFromFile(Context context) {
         ArrayList<ArrayList<?>> data = new ArrayList<>();
 
@@ -172,7 +207,7 @@ public class Data_of_user_product {
         return data;
     }
 
-    public boolean check_file(Context context){
+    public boolean check_file(Context context) {
         File file = new File(context.getFilesDir(), "data.txt");
         return file.exists();
     }
