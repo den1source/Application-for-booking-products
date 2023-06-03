@@ -1,87 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="1dp">
+    android:background="#E52B50">
 
-    <EditText
-        android:id="@+id/user"
-        android:layout_width="234dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="1dp"
-        android:hint="Имя пользователя"
-        app:layout_constraintBottom_toTopOf="@+id/password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/result_main_activity" />
-
-    <Button
-        android:id="@+id/enter_check"
-        android:layout_width="187dp"
-        android:layout_height="0dp"
-        android:onClick="enter_to_app"
-        android:text="Войти"
-        app:layout_constraintBottom_toTopOf="@+id/registr"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
-
-    <Button
-        android:id="@+id/registr"
-        android:layout_width="187dp"
-        android:layout_height="0dp"
-        android:text="Регистрация"
-        app:layout_constraintBottom_toTopOf="@+id/enter_admin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter_check" />
-
-    <Button
-        android:id="@+id/enter_admin"
-        android:layout_width="187dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="255dp"
-        android:text="Для администратора"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registr" />
+        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="227dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="13dp"
-        android:ems="10"
-        android:hint="Пароль"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/switch1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user" />
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="40sp"
+            android:paddingTop="70sp"
+            app:srcCompat="@drawable/loginj" />
 
-    <TextView
-        android:id="@+id/result_main_activity"
-        android:layout_width="236dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="41dp"
-        app:layout_constraintBottom_toTopOf="@+id/user"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/result_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/password" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="233dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="18dp"
-        android:text="Запомнить пароль и логин?"
-        app:layout_constraintBottom_toTopOf="@+id/enter_check"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Имя пользователя"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Пароль"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:inputType="textPassword" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60sp"
+            android:layout_marginRight="60sp"
+            android:layout_marginTop="15sp"
+            android:textColor="@color/white"
+            android:text="Запомнить пароль и логин?" />
+
+        <Button
+            android:id="@+id/registr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="50sp"
+            android:layout_marginTop="15sp"
+            android:layout_marginRight="50sp"
+            android:background="@drawable/button"
+            android:text="Регистрация"
+            android:textColor="@color/white"
+            app:strokeColor="#000000" />
+
+        <Button
+            android:id="@+id/enter_check"
+            android:background="@drawable/button"
+            android:layout_marginLeft="50sp"
+            android:layout_marginRight="50sp"
+            android:layout_marginTop="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:onClick="enter_to_app"
+            android:text="Войти" />
+
+    </LinearLayout>
+</RelativeLayout>
