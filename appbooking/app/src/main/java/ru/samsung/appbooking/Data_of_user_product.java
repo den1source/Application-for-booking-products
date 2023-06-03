@@ -41,20 +41,6 @@ public class Data_of_user_product {
         sum.clear();
     }
 
-    /*public void add_product(String name, int id, int kol_vo_, double price_of_product, Context context) {
-        name_product.clear();
-        id_product.clear();
-        kol_vo.clear();
-        sum.clear();
-
-        name_product.add(name);
-        id_product.add(id);
-        kol_vo.add(kol_vo_);
-        sum.add((price_of_product) * kol_vo_);
-
-        writeArrayListToFile(name_product, id_product, kol_vo, sum, context);
-    }*/
-
 
     public void change(String name, int kol, double price, Context context) {
         ArrayList<ArrayList<?>> data = readArrayListFromFile(context);

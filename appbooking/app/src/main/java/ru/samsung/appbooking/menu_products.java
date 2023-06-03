@@ -1,9 +1,11 @@
 package ru.samsung.appbooking;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +51,13 @@ public class menu_products extends AppCompatActivity {
 
         fetchData();
     }
+
+    public void enter_korzina(View v){
+        Intent i = new Intent(menu_products.this, OrderActivity.class);
+        startActivityForResult(i, 0);
+    }
+
+
 
     private void fetchData() {
         OkHttpClient client = new OkHttpClient();
