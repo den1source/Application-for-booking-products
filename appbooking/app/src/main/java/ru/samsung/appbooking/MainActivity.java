@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && log != null && password != null) {
+                if (isChecked && log != null && password != null ) {
                     String login = log.getText().toString();
                     String password1 = password.getText().toString();
                     UserDataManager.saveUserData(MainActivity.this, login, password1);
