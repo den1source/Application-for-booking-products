@@ -29,42 +29,43 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class OrderActivity extends AppCompatActivity {
-    Data_of_user_product data_w_r=new Data_of_user_product();
+    Data_of_user_product data_w_r = new Data_of_user_product();
     int size, c_1, c_2, size_for_l;
     ArrayList<String> product = new ArrayList<>();
-    ArrayList<String> product_f = new ArrayList<>();
-    ArrayList<String> price = new ArrayList<>();
+    ArrayList<Double> price = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
     ArrayList<Integer> ids = new ArrayList<>();
-    ArrayList<Integer> kol_vo=new ArrayList<>();
+    ArrayList<Integer> kol_vo = new ArrayList<>();
     ArrayList<Data> datas = new ArrayList<Data>();
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_products);
-        Data_of_user_product data_w_r_=new Data_of_user_product();
-        if(data_w_r_.check_file(this)){
-            ArrayList<ArrayList<?>> data=data_w_r.readArrayListFromFile(this);
+        Data_of_user_product data_w_r_ = new Data_of_user_product();
+        if (data_w_r_.check_file(this)) {
+            ArrayList<ArrayList<?>> data = data_w_r.readArrayListFromFile(this);
             ArrayList<Integer> list2 = (ArrayList<Integer>) data.get(1);
-            kol_vo = (ArrayList<Integer>) data.get(2);
-            product=(ArrayList<String>) data.get(0);
+            if(list2.size()!=0){
+                kol_vo = (ArrayList<Integer>) data.get(2);
+                product = (ArrayList<String>) data.get(0);
 
 
-            c_1=0;
-            System.out.println(price);
-            System.out.println(list2);//ids
-            System.out.println(kol_vo);
-            size=list2.size();
-            for(int id:list2){
-                new Thread(()->{
+                c_1 = 0;
+                System.out.println(price);
+                System.out.println(list2);//ids
+                System.out.println(kol_vo);
+                size = list2.size();
+                for (int id : list2) {
                     fetchData(id);
-                }).start();
+                }
             }
-        }
-        else {
+            else {
+                TextView textView = findViewById(R.id.textView);
+                textView.setText("Корзина пуста!");
+            }
+        } else {
             TextView textView = findViewById(R.id.textView);
             textView.setText("Корзина пуста!");
         }
@@ -109,7 +110,7 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    public void get_arrays(String res){
+    public void get_arrays(String res) {
 
         Gson gson = new Gson();
         ArrayList<String> arrayList = gson.fromJson(res, new TypeToken<ArrayList<String>>() {
@@ -117,15 +118,15 @@ public class OrderActivity extends AppCompatActivity {
         //System.out.println("000000"+arrayList);
         size_for_l = arrayList.size();
         for (int i = 0; i < size_for_l; i += 4) {
-            int x=Integer.parseInt(arrayList.get(i));
+            int x = Integer.parseInt(arrayList.get(i));
             ids.add(x);
-            int index=ids.indexOf(x);
+            int index = ids.indexOf(x);
             product.add(index, arrayList.get(i + 1));
-            price.add(index, arrayList.get(i + 2));
+            price.add(index, Double.valueOf(arrayList.get(i + 2)));
             time.add(index, arrayList.get(i + 3));
         }
-        if(c_1==size){
-            c_2=0;
+        if (c_1 == size) {
+            c_2 = 0;
             for (int i : ids) {
                 int finalI = i;
                 new Thread(() -> {
@@ -207,38 +208,34 @@ public class OrderActivity extends AppCompatActivity {
 
     public void start_() {
         setContentView(R.layout.menu_products);
-        int c=0;
-
+        int c = 0;
         datas.clear();//
-        Data_of_user_product data_w_r_=new Data_of_user_product();
-        data_w_r_.clear_arrays();//
+        new Data_of_user_product().clear_arrays();//
 
-        System.out.println("!!!!!!!");
+
+        ArrayList<ArrayList<?>> data = data_w_r.readArrayListFromFile(this);
+        ArrayList<String> name_product = (ArrayList<String>) data.get(0);
         for (int i = 0; i < size; i++) {//size_for_l/4
-            c++;
-            datas.add(new Data(ids.get(i),product.get(i), price.get(i), time.get(i), kol_vo.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg", this));
+            System.out.println("!!!!!!!!!!!3333!!!!!");
+            if (name_product.contains(product.get(i))) {
+                c++;
+                System.out.println("c=" + c + "  ," + "size" + size);
+                //contains
+                datas.add(new Data(ids.get(i), product.get(i), price.get(i), time.get(i), kol_vo.get(i), getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/product" + ids.get(i) + ".jpg", this));
+            }
         }
-        if (c!=0){
+        if (c != 0) {
             RecyclerView recyclerView = findViewById(R.id.list);
             DataAdapter_for_korzina adapter = new DataAdapter_for_korzina(this, datas);
             recyclerView.setAdapter(adapter);
-        }
-        else{
+        } else {
+            System.out.println("!!!!!!!!!!!!!!!!");
             TextView textView = findViewById(R.id.textView);
             textView.setText("Корзина пуста!");
         }
 
 
     }
-
-    public ArrayList<String> getARR(){
-        return product_f;
-    }
-    public void change_delete_elem_ARR(String name){
-        int index = product_f.indexOf(name);
-        product_f.remove(index);
-    }
-
 
 
 }

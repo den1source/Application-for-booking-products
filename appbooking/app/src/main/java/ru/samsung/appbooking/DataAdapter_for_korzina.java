@@ -19,12 +19,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DataAdapter_for_korzina extends RecyclerView.Adapter<DataAdapter_for_korzina.ViewHolder> {
     private final LayoutInflater inflater;
     private final List<Data> datas;
     ArrayList<String> name_prd = new ArrayList<>();
-    ArrayList<String> products_in_order;
-    Data_of_user_product data_w_r = new Data_of_user_product();
+    Data_of_user_product data_w_r=new Data_of_user_product();
 
 
     DataAdapter_for_korzina(Context context, List<Data> datas) {
@@ -41,11 +41,9 @@ public class DataAdapter_for_korzina extends RecyclerView.Adapter<DataAdapter_fo
     @Override
     public void onBindViewHolder(DataAdapter_for_korzina.ViewHolder holder, int position) {
         Data data = datas.get(position);
-
-
         Picasso.get().load(new File(data.getPath())).into(holder.imageView);
         holder.nameView.setText(data.getName());
-        holder.priceView.setText(data.getPrice() + " руб.");
+        holder.priceView.setText(data.getPrice()*data.getQuantity() + " руб.");
         holder.timeView.setText(data.getTime() + " мин.");
         holder.quantityTextView.setText(String.valueOf(data.getQuantity()));
 
@@ -78,6 +76,7 @@ public class DataAdapter_for_korzina extends RecyclerView.Adapter<DataAdapter_fo
                     holder.quantityTextView.setText(String.valueOf(quantity));
                     holder.minusButton.setVisibility(View.VISIBLE);
                     holder.checkButton.setVisibility(View.VISIBLE);
+                    data_w_r.change(clickedData.getName(), clickedData.getQuantity(), clickedData.getPrice(), v.getContext());
                     notifyDataSetChanged();
                 }
             }
@@ -97,13 +96,10 @@ public class DataAdapter_for_korzina extends RecyclerView.Adapter<DataAdapter_fo
                     if (quantity == 0) {
                         holder.minusButton.setVisibility(View.GONE);
                         holder.checkButton.setVisibility(View.GONE);
-                        if (name_prd.size() != 0) {
-                            products_in_order.remove(clickedData.getName());
-                            name_prd.remove(name_prd.indexOf(clickedData.getName()));
-                            data_w_r.change_delete_product(clickedData.getName(), clickedData.getContext());
-                        }
+                        name_prd.remove(clickedData.getName());
+                        data_w_r.change_delete_product(clickedData.getName(), v.getContext());
+                        notifyDataSetChanged();
                     }
-                    notifyDataSetChanged();
                 }
             }
         });
@@ -115,13 +111,14 @@ public class DataAdapter_for_korzina extends RecyclerView.Adapter<DataAdapter_fo
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     Data clickedData = datas.get(currentPosition);
                     String name = clickedData.getName();
-                    //int quantity = clickedData.getQuantity();
-                    Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), name + " добавлен в корзину", Toast.LENGTH_SHORT).show();
                     name_prd.add(clickedData.getName());
-                    data_w_r.change(clickedData.getName(), clickedData.getQuantity(), Double.parseDouble(clickedData.getPrice()), clickedData.getContext());
+                    notifyDataSetChanged();
                 }
             }
         });
+
+
     }
 
     @Override

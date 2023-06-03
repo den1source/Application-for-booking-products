@@ -65,6 +65,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                 int currentPosition = holder.getAdapterPosition();
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     Data clickedData = datas.get(currentPosition);
+                    //name_prd.add(data.getName());
                     //Toast.makeText(v.getContext(), "Button clicked for item: " + clickedData.getName(), Toast.LENGTH_SHORT).show();
                     clickedData.setQuantity(1);
                     notifyDataSetChanged();
@@ -84,6 +85,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     holder.quantityTextView.setText(String.valueOf(quantity));
                     holder.minusButton.setVisibility(View.VISIBLE);
                     holder.checkButton.setVisibility(View.VISIBLE);
+
                     notifyDataSetChanged();
                 }
             }
@@ -104,8 +106,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                         holder.minusButton.setVisibility(View.GONE);
                         holder.checkButton.setVisibility(View.GONE);
                         if(name_prd.size()!=0){
-                            name_prd.remove(name_prd.indexOf(clickedData.getName()));
-                            data_w_r.delete_product(clickedData.getName(), clickedData.getContext());
+                            if(name_prd.contains(clickedData.getName())){
+                                Toast.makeText(v.getContext(), clickedData.getName() + ",удален из корзины", Toast.LENGTH_SHORT).show();
+                                name_prd.remove(name_prd.indexOf(clickedData.getName()));
+                                data_w_r.change_delete_product(clickedData.getName(), clickedData.getContext());
+                            }
+
+
                         }
                     }
                     notifyDataSetChanged();
@@ -121,9 +128,15 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     Data clickedData = datas.get(currentPosition);
                     String name = clickedData.getName();
                     //int quantity = clickedData.getQuantity();
-                    Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
-                    name_prd.add(clickedData.getName());
-                    data_w_r.add_product(clickedData.getName(), clickedData.getId(), clickedData.getQuantity(), Double.parseDouble(clickedData.getPrice()),clickedData.getContext());
+                    if(!name_prd.contains(clickedData.getName())){
+                        Toast.makeText(v.getContext(), name + ",добавлен в корзину", Toast.LENGTH_SHORT).show();
+                        name_prd.add(clickedData.getName());
+                        data_w_r.change_add_product(clickedData.getName(), clickedData.getId(), clickedData.getQuantity(), clickedData.getPrice(),clickedData.getContext());
+                    }
+                    else {
+                        Toast.makeText(v.getContext(), name + ",уже в корзине", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });

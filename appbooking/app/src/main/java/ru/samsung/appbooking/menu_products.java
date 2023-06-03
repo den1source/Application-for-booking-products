@@ -34,7 +34,7 @@ import okhttp3.ResponseBody;
 
 public class menu_products extends AppCompatActivity {
     ArrayList<String> product = new ArrayList<>();
-    ArrayList<String> price = new ArrayList<>();
+    ArrayList<Double> price = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
     ArrayList<Integer> ids = new ArrayList<>();
 
@@ -97,7 +97,7 @@ public class menu_products extends AppCompatActivity {
         for (int i = 0; i < size; i += 4) {
             ids.add(Integer.valueOf(arrayList.get(i)));
             product.add(arrayList.get(i + 1));
-            price.add(arrayList.get(i + 2));
+            price.add(Double.valueOf(arrayList.get(i + 2)));
             time.add(arrayList.get(i + 3));
         }
         c = 0;

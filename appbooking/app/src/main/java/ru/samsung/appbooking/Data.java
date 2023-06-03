@@ -6,17 +6,15 @@ import java.util.ArrayList;
 
 public class Data {
     private String name;
-    private String price;
+    private Double price;
     private String time;
     private String path;
-    //private int kol_vo;
     private int Quantity;
     private int id;
     private Context context;
     private ArrayList<String> arr;
-    //private int imageResource;
 
-    public Data(int id, String name, String price, String time, String path, Context context) {
+    public Data(int id, String name, Double price, String time, String path, Context context) {
         this.id=id;
         this.name = name;
         this.price = price;
@@ -26,7 +24,7 @@ public class Data {
         this.context=context;
     }
 
-    public Data(int id, String name, String price, String time, int kol_vo, String path, Context context) {
+    public Data(int id, String name, Double price, String time, int kol_vo, String path, Context context) {
         this.id=id;
         this.name = name;
         this.price = price;
@@ -40,7 +38,7 @@ public class Data {
         return time;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
