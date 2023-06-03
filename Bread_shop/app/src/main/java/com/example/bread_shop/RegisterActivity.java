@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity
             //finish();
         } else if (responseData.equals("already")) {
             loadingBar.dismiss();
-            Toast.makeText(RegisterActivity.this, "Номер" + phone + "уже зарегистрирован", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Номер " + phone + " уже зарегистрирован", Toast.LENGTH_SHORT).show();
         } else {
             loadingBar.dismiss();
             Toast.makeText(RegisterActivity.this, "Ошибка.", Toast.LENGTH_SHORT).show();
