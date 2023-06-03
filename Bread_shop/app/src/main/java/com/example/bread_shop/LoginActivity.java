@@ -110,8 +110,6 @@ public class LoginActivity extends AppCompatActivity {
     private void ValidateUser(final String phone, final String password) {
 
 
-
-
         check_post_data(phone, password);
         System.out.println("!!!!!!!!!!!!!!");
 
@@ -167,9 +165,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void check_post_data(String phone, String password) {
+        String v = "enter_chk";
+
+        if (parentDbName.equals("Admins")) v = "admin_chk";
+
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/auth").newBuilder();
-        urlBuilder.addQueryParameter("what_do", "enter_chk");
+        urlBuilder.addQueryParameter("what_do", v);
         urlBuilder.addQueryParameter("phone", phone);
         urlBuilder.addQueryParameter("pass", password);
         String url = urlBuilder.build().toString();
@@ -190,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                processResponseData(responseData,phone, password);
+                                processResponseData(responseData, phone, password);
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
@@ -206,15 +208,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void processResponseData(String responseData,String phone, String password) throws InterruptedException {
+    public void processResponseData(String responseData, String phone, String password) throws InterruptedException {
         System.out.println(responseData);
         switch (responseData) {
             case "ok":
                 if (checkBoxRememberMe.isChecked()) {
-                    UserDataManager.saveUserData(LoginActivity.this, phone, password);
-
-                }
-                else {
+                    UserDataManager.saveUserData(LoginActivity.this, parentDbName, phone, password);
+                } else {
                     UserDataManager.clearUserData(LoginActivity.this);
                 }
 
@@ -229,7 +229,9 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case "pass_no":
                 loadingBar.dismiss();
-                Toast.makeText(LoginActivity.this, "Такого номера нет", Toast.LENGTH_SHORT).show();
+                String v="Такого номера нет";
+                if(parentDbName.equals("Admins")) v="Такого логина нет";
+                Toast.makeText(LoginActivity.this, v, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 loadingBar.dismiss();

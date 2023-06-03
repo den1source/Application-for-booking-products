@@ -18,25 +18,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        if (UserDataManager.getSavedRole(MainActivity.this) == "1user") {
+            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            startActivityForResult(i, 0);
+        }
+        else if (UserDataManager.getSavedRole(MainActivity.this) == "1admin") {
+            //Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            //startActivityForResult(i, 0);
+        }
+        else {
+            setContentView(R.layout.activity_main);
 
-        joinButton = (Button) findViewById(R.id.main_join_btn);
-        loginButton = (Button) findViewById(R.id.main_login_btn);
+            joinButton = (Button) findViewById(R.id.main_join_btn);
+            loginButton = (Button) findViewById(R.id.main_login_btn);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
-            }
-        });
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(registerIntent);
-            }
-        });
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                }
+            });
+            joinButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                    startActivity(registerIntent);
+                }
+            });
+        }
 
 
     }
