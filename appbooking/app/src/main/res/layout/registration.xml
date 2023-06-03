@@ -6,32 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     tools:layout_editor_absoluteX="-6dp"
-    tools:layout_editor_absoluteY="30dp">
+    tools:layout_editor_absoluteY="30dp"
+    android:background="#E52B50">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/result_TEXT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:padding="15sp"/>
+
         <EditText
-            android:id="@+id/editTextNumber"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            android:ems="10"
-            android:hint="Возраст"
-            android:inputType="number" />
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:hint="Имя"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/editTextLastName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
-            android:ems="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
             android:hint="Фамилия"
             android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editTextNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:hint="Возраст"
+            android:inputType="number" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -41,54 +67,53 @@
             app:layout_constraintGuide_begin="14dp" />
 
         <EditText
+            android:id="@+id/reg_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:hint="Имя пользователя (Логин)" />
+
+        <EditText
             android:id="@+id/reg_password"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
-            android:ems="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
             android:hint="Пароль"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/reg_password_enter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40sp"
+            android:layout_marginRight="40sp"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/fields"
+            android:padding="15sp"
+            android:hint="Введите пароль еще раз"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/registration_butt"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="11dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginBottom="253dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50sp"
+            android:layout_marginTop="15sp"
+            android:layout_marginRight="50sp"
+            android:background="@drawable/button"
             android:text="Зарегистрироваться"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <EditText
-            android:id="@+id/reg_password_enter"
-            android:layout_width="241dp"
-            android:layout_height="0dp"
-            android:ems="10"
-            android:hint="Введите пароль еще раз"
-            android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/reg_user"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:hint="Имя пользователя (Логин)" />
 
-        <TextView
-            android:id="@+id/result_TEXT"
-            android:layout_width="229dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="30dp" />
-
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp"
-            android:ems="10"
-            android:hint="Имя"
-            android:inputType="textPersonName" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
