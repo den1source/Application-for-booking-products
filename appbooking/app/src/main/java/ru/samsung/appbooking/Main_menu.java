@@ -45,20 +45,6 @@ public class Main_menu extends AppCompatActivity {
 
 
 
-    /*public void createAppBookingFolder() {
-        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/images_for_menu";
-        File folder = new File(folderPath);
-
-        if (!folder.exists()) {
-            if (folder.mkdirs()) {
-                // Папка успешно создана
-                Log.d("CreateFolder", "Folder created successfully.");
-            } else {
-                // Ошибка при создании папки
-                Log.e("CreateFolder", "Failed to create folder.");
-            }
-        }
-    }*/
 
     public boolean checkImageFolder(String folderPath, int requiredImageCount) {
         File folder = new File(folderPath);
@@ -86,6 +72,11 @@ public class Main_menu extends AppCompatActivity {
 
         // Количество изображений не совпадает с требуемым числом или директория не найдена
         return false;
+    }
+
+    public void enter_korzina(View v){
+        Intent i = new Intent(Main_menu.this, OrderActivity.class);
+        startActivityForResult(i, 0);
     }
 
     @Override
