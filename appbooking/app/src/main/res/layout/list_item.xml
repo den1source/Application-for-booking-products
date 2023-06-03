@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="10dp" />
+        android:layout_width="160sp"
+        android:layout_height="160sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/name"
@@ -71,32 +71,48 @@
 
     <TextView
         android:id="@+id/quantityTextView"
-        android:layout_width="23dp"
-        android:layout_height="28dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="5sp"
+        android:layout_marginTop="20sp"
         android:text="1"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="115dp" />
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/plusButton"
+        app:layout_constraintStart_toEndOf="@+id/minusButton"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <Button
         android:id="@+id/plusButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="15sp"
         android:text="+"
-        android:visibility="gone" />
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/minusButton"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <Button
         android:id="@+id/minusButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5sp"
+        android:layout_marginTop="15sp"
         android:text="-"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="120dp" />
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/checkButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="180sp"
+        android:layout_marginTop="15sp"
         android:text="✓"
-        android:visibility="gone" />
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
