@@ -77,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity
     }
 
     public void Make_Acc(String name, String phone, String password) {
+        System.out.println("111111111111");
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/auth").newBuilder();
         urlBuilder.addQueryParameter("what_do", "check_and_add_data");
@@ -114,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity
     }
 
     public void processResponseData(String responseData, String pass, String phone) {
+        System.out.println("1111111111");
         if (responseData.equals("good")) {
             loadingBar.dismiss();
             Toast.makeText(this, "Регистрация успешна!", Toast.LENGTH_LONG).show();
