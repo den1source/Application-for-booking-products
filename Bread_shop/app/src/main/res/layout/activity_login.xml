@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E52B50">
+    android:background="@drawable/background">
 
     <ImageView
         android:id="@+id/applogo"
         android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:src="@drawable/applogo"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        />
+        android:layout_marginTop="130dp"
+        android:src="@drawable/login" />
 
     <EditText
         android:id="@+id/login_phone_input"
@@ -27,8 +26,8 @@
         android:hint="Номер телефона"
         android:inputType="number"
         android:padding="15dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColor="#bbbbbb"
+        android:textColorHint="#bbbbbb"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -44,8 +43,8 @@
         android:hint="Пароль"
         android:inputType="textPassword"
         android:padding="15dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
+        android:textColor="#bbbbbb"
+        android:textColorHint="#bbbbbb"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -76,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Забыли пароль?"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginLeft="80dp"
@@ -105,28 +104,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_btn"
-        android:layout_marginTop="10dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
         android:text="Для админа"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/not_admin_panel_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_btn"
-        android:layout_marginTop="10dp"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
         android:text="Для клиентов"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
 </RelativeLayout>
