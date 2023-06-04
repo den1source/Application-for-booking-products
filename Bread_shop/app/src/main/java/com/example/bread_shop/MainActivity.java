@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Users")) {
-            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            Intent i = new Intent(MainActivity.this, UserHomeActivity.class);
             startActivityForResult(i, 0);
         }
         else if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Admins")) {
