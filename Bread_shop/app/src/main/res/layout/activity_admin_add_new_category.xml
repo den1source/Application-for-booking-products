@@ -4,31 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminAddNewCategoryActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    tools:context=".AdminAddNewCategoryActivity">
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/add_categ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="81dp"
+        android:layout_marginBottom="75dp"
         android:text="Добавить категорию"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="608dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <EditText
+        android:id="@+id/name_cat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="245dp"
         android:text="Название категории"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="467dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/add_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="235dp"
+        android:layout_marginEnd="53dp"
         android:text="Добавить изображение"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="235dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

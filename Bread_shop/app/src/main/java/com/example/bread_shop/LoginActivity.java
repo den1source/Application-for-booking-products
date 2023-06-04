@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private EditText usernameInput, phoneInput, passwordInput;
     private ProgressDialog loadingBar;
-    private TextView AdminLink, NotAdminLink;
+    private TextView AdminLink, NotAdminLink, LoginPhone;
 
     private String parentDbName = "Users";
     private CheckBox checkBoxRememberMe;
@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         loginBtn = (Button) findViewById(R.id.login_btn);
         phoneInput = (EditText) findViewById(R.id.login_phone_input);
         passwordInput = (EditText) findViewById(R.id.login_password_input);
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         check_post_data(phone, password);
-        System.out.println("!!!!!!!!!!!!!!");
+
 
         /*final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -209,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void processResponseData(String responseData, String phone, String password) throws InterruptedException {
-        System.out.println(responseData);
+        //System.out.println(responseData);
         switch (responseData) {
             case "ok":
                 if (checkBoxRememberMe.isChecked()) {
@@ -220,8 +219,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 loadingBar.dismiss();
                 Toast.makeText(LoginActivity.this, "Успешный вход!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivityForResult(i, 0);
+
+                if(parentDbName.equals("Admins")){
+                    Intent i = new Intent(LoginActivity.this, AdminActivity.class);
+                    startActivityForResult(i, 0);
+                }
+                else {
+                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivityForResult(i, 0);
+                }
                 break;
             case "ph_no":
                 loadingBar.dismiss();

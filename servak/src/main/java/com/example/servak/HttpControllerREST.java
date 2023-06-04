@@ -95,10 +95,11 @@ public class HttpControllerREST extends HttpServlet {
             }
             case "enter_chk" -> {
                 //System.out.println(request.getParameter("phone")+" "+ request.getParameter("pass"));
-                return check_pass_log_user(request.getParameter("phone"), request.getParameter("pass"));
+                return check_pass_log_user(request.getParameter("phone"), request.getParameter("pass"), "table_of_users");
             }
             case "admin_chk" -> {
-                return check_pass_log_admin(request.getParameter("login"), request.getParameter("pass"));
+                System.out.println(request.getParameter("phone") + " " + request.getParameter("pass"));
+                return check_pass_log_admin(request.getParameter("phone"), request.getParameter("pass"), "table_of_admins");
             }
             case "number_of_types" -> {
                 return get_numbers_lines("types_of_products", "vid");
@@ -246,32 +247,33 @@ public class HttpControllerREST extends HttpServlet {
     }
 
 
-    public String check_pass_log_admin(String pass, String login) {
+    public String check_pass_log_admin(String login, String pass, String table) {
         try {
-
-            if (get_all_logins().contains(login) && get_all_password().contains(pass)) {
+            System.out.println(get_all_logins().contains(login) + " " + get_all_password(table).contains(pass));
+            if (get_all_logins().contains(login) && get_all_password(table).contains(pass)) {
                 return "ok";
-            } else if (!get_all_logins().contains(login) && get_all_password().contains(pass)) {
+            } else if (!get_all_logins().contains(login) && get_all_password(table).contains(pass)) {
                 return "ph_no";
-            } else if (get_all_logins().contains(login) && !get_all_password().contains(pass)) {
+            } else if (get_all_logins().contains(login) && !get_all_password(table).contains(pass)) {
                 return "pass_no";
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            System.out.println("11111");
             return "error";
         }
         return "error";
     }
 
-    public String check_pass_log_user(String pass, String phone) {
+    public String check_pass_log_user(String phone, String pass, String table) {
         try {
             //return get_all_phones().contains(phone) && get_all_password(table).contains(pass);
-            System.out.println(get_all_phones().contains(phone)+" "+get_all_password().contains(pass));
-            if (get_all_phones().contains(phone) && get_all_password().contains(pass)) {
+            System.out.println(get_all_phones().contains(phone) + " " + get_all_password(table).contains(pass));
+            if (get_all_phones().contains(phone) && get_all_password(table).contains(pass)) {
                 return "ok";
-            } else if (!get_all_phones().contains(phone) && get_all_password().contains(pass)) {
+            } else if (!get_all_phones().contains(phone) && get_all_password(table).contains(pass)) {
                 return "ph_no";
-            } else if (get_all_phones().contains(phone) && !get_all_password().contains(pass)) {
+            } else if (get_all_phones().contains(phone) && !get_all_password(table).contains(pass)) {
                 return "pass_no";
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -281,14 +283,14 @@ public class HttpControllerREST extends HttpServlet {
         return "error";
     }
 
-    private ArrayList<String> get_all_password() throws ClassNotFoundException, SQLException {
+    private ArrayList<String> get_all_password(String t_n) throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
         Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
                 "denis21042", "JfWRQ5PG9iKn");
         ArrayList<String> pass_tt = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + "table_of_users");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + t_n);
             while (rs.next()) {
                 String login = rs.getString("PASSWORD_OF_USER");
                 pass_tt.add(login);

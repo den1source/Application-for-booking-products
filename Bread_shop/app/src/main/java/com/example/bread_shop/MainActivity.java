@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button joinButton, loginButton;
@@ -18,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (UserDataManager.getSavedRole(MainActivity.this) == "1user") {
+        if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Users")) {
             Intent i = new Intent(MainActivity.this, HomeActivity.class);
             startActivityForResult(i, 0);
         }
-        else if (UserDataManager.getSavedRole(MainActivity.this) == "1admin") {
-            //Intent i = new Intent(MainActivity.this, HomeActivity.class);
-            //startActivityForResult(i, 0);
+        else if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Admins")) {
+            Intent i = new Intent(MainActivity.this, AdminActivity.class);
+            startActivityForResult(i, 0);
         }
         else {
             setContentView(R.layout.activity_main);

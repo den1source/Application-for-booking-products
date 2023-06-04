@@ -115,15 +115,14 @@ public class RegisterActivity extends AppCompatActivity
     }
 
     public void processResponseData(String responseData, String pass, String phone) {
-        System.out.println("1111111111");
         if (responseData.equals("good")) {
             loadingBar.dismiss();
             Toast.makeText(this, "Регистрация успешна!", Toast.LENGTH_LONG).show();
-            //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            //intent.putExtra("password", pass);
-            //intent.putExtra("phone", phone);
-            ///setResult(RESULT_OK, intent);
-            //finish();
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            intent.putExtra("password", pass);
+            intent.putExtra("phone", phone);
+            setResult(RESULT_OK, intent);
+            finish();
         } else if (responseData.equals("already")) {
             loadingBar.dismiss();
             Toast.makeText(RegisterActivity.this, "Номер " + phone + " уже зарегистрирован", Toast.LENGTH_SHORT).show();

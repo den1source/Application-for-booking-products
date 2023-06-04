@@ -10,47 +10,63 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginBottom="21dp"
         android:text=" Выберите дейстрие"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="136dp" />
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/button" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="26dp"
+        android:onClick="add_new_category"
         android:text="Добавить категорию"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="182dp" />
+        app:layout_constraintEnd_toEndOf="@+id/button6"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:onClick="add_new_product"
         android:text="Добавить товар"
-        tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="304dp" />
+        app:layout_constraintStart_toStartOf="@+id/button7"
+        app:layout_constraintTop_toBottomOf="@+id/button6" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="175dp"
         android:text="Просмотр статистики заказов"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="508dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
         android:text="удалить категорию"
-        tools:layout_editor_absoluteX="114dp"
-        tools:layout_editor_absoluteY="256dp" />
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <Button
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="79dp"
         android:text="Удалить товар"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="363dp" />
+        app:layout_constraintEnd_toEndOf="@+id/button3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

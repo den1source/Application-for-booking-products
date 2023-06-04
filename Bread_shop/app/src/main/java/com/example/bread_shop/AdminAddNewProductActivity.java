@@ -1,4 +1,4 @@
-package com.example.myshop.ui.Admin;
+package com.example.bread_shop;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,19 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.myshop.R;
-import com.example.myshop.ui.LoginActivity;
-import com.example.myshop.ui.RegisterActivity;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,8 +30,8 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
     private Button addNewProductButton;
     private static final int GALLERYPICK = 1;
     private Uri ImageUri;
-    private StorageReference ProductImageRef;
-    private DatabaseReference ProductsRef;
+    //private StorageReference ProductImageRef;
+    //private DatabaseReference ProductsRef;
     private ProgressDialog loadingBar;
 
     @Override
@@ -51,24 +39,24 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_add_new_product);
 
-        init();
+        //init();
 
         productImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OpenGallery();
+                //OpenGallery();
             }
         });
 
         addNewProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ValidateProductData();
+                //ValidateProductData();
             }
         });
     }
 
-    private void ValidateProductData() {
+    /*private void ValidateProductData() {
         Description = product_time.getText().toString();
         Price = productPrice.getText().toString();
         Pname = productName.getText().toString();
@@ -210,5 +198,5 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
         ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
         loadingBar = new ProgressDialog(this);
 
-    }
+    }*/
 }
