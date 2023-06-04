@@ -65,8 +65,63 @@ public class HttpControllerREST extends HttpServlet {
 
     @RequestMapping("/type")
     public boolean check_data(HttpServletRequest request) throws SQLException, ClassNotFoundException {
-        switch (request.getParameter("what_do")){
-            case "check_name": return get_all_types().contains(request.getParameter("name"));
+        switch (request.getParameter("what_do")) {
+            case "check_name":
+                return get_all_types().contains(request.getParameter("name"));
+            case "delete_type":
+                String[] numbersArray = request.getParameter("str").split(",");
+                ArrayList<Integer> numbersList = new ArrayList<>();
+                for (String number : numbersArray) {
+                    int num = Integer.parseInt(number);
+                    numbersList.add(num);
+                }
+                System.out.println(numbersList);
+                deleteTypes(numbersList);
+                for (int i : numbersList) {
+                    delete_file(i + ".jpg");
+                }
+                return true;
+        }
+        return false;
+    }
+
+    private void delete_products_of_type(int id) throws ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                    "denis21042", "JfWRQ5PG9iKn");
+            String query = "DELETE FROM types_of_products WHERE ID = ?";
+            statement = connection.prepareStatement(query);
+
+            for (int id : ids) {
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    private boolean delete_file(String imageName) {
+        String directoryPath = "Data/Images/Types/"; // Путь к директории с изображениями
+        File directory = new File(directoryPath);
+        if (directory.exists()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && file.getName().equals(imageName)) {
+                        return file.delete();
+                    }
+                }
+            }
+        } else {
+            return false;
         }
         return false;
     }
@@ -135,6 +190,7 @@ public class HttpControllerREST extends HttpServlet {
         System.out.println(data);
         return data;
     }
+
     public ArrayList<String> get_all_types() throws ClassNotFoundException, SQLException {
         ArrayList<String> data = new ArrayList<>();
 
@@ -146,7 +202,33 @@ public class HttpControllerREST extends HttpServlet {
             ResultSet rs = stmt.executeQuery("SELECT * FROM types_of_products");
             while (rs.next()) {
                 data.add(rs.getString("vid"));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
 
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println(data);
+        return data;
+    }
+
+    public ArrayList<String> get_all_from_types() throws ClassNotFoundException, SQLException {
+        ArrayList<String> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM types_of_products");
+            while (rs.next()) {
+                data.add(String.valueOf(rs.getInt("id")));
+                data.add(rs.getString("vid"));
             }
             rs.close();
             stmt.close();
@@ -171,10 +253,43 @@ public class HttpControllerREST extends HttpServlet {
             case "get_id":
                 ArrayList<String> id = get_id_of_products(request.getParameter("num"));
                 return ResponseEntity.ok().body(new Gson().toJson(id));
+            case "gettypes":
+                ArrayList<String> types = get_all_from_types();
+                return ResponseEntity.ok().body(new Gson().toJson(types));
             default:
                 ArrayList<String> arr = new ArrayList<>();
                 arr.add("0");
                 return ResponseEntity.ok().body(new Gson().toJson(arr));
+        }
+    }
+
+    private void deleteTypes(ArrayList<Integer> ids) throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                    "denis21042", "JfWRQ5PG9iKn");
+            String query = "DELETE FROM types_of_products WHERE ID = ?";
+            statement = connection.prepareStatement(query);
+
+            for (int id : ids) {
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
