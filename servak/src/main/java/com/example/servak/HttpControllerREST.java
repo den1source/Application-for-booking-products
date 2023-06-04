@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -25,14 +26,50 @@ import static java.lang.Integer.parseInt;
 @RestController
 public class HttpControllerREST extends HttpServlet {
 
-    /*@PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestBody byte[] imageBytes) {
-        // Здесь выполняется логика загрузки изображения
-        // imageBytes - массив байтов, представляющий загруженное изображение
+    @RequestMapping("/download_image")
+    public String uploadImage(@RequestBody byte[] imageBytes, HttpServletRequest request) throws SQLException, ClassNotFoundException, IOException {
+        //bytesToImage(imageBytes, "Data/Images/Types/");
+        int index = 0;
+        ArrayList<Integer> arr = get_all_types_id();
+        do {
+            if (arr.contains(index)) {
+                index++;
+            } else break;
+        } while (true);
+        bytesToImage(imageBytes, "Data/Images/Types/" + index + ".jpg");
+        //System.out.println(request.getParameter("name")+"!!!!!!!!!!!!!!!!!!!!!!!!");
+        return String.valueOf(add_type(index, request.getParameter("name")));
+    }
 
-        // Возвращаем сообщение об успешной загрузке
-        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
-    }*/
+    private boolean add_type(int index, String name) throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            PreparedStatement pr_stmt = null;
+            String sql = "INSERT INTO types_of_products (ID,VID) VALUES (?,?)";
+            pr_stmt = c.prepareStatement(sql);
+            pr_stmt.setLong(1, index);
+            pr_stmt.setString(2, name);
+            pr_stmt.executeUpdate();
+            pr_stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.out.println("Ошибка во внесении данных в БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return true;
+    }
+
+    @RequestMapping("/type")
+    public boolean check_data(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        switch (request.getParameter("what_do")){
+            case "check_name": return get_all_types().contains(request.getParameter("name"));
+        }
+        return false;
+    }
 
     @RequestMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> downloadImage(HttpServletRequest request) throws IOException {
@@ -62,6 +99,67 @@ public class HttpControllerREST extends HttpServlet {
         ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
 
         return byteArrayOutputStream.toByteArray();
+    }
+
+    public static void bytesToImage(byte[] imageBytes, String outputPath) throws IOException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
+        BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
+
+        File outputFile = new File(outputPath);
+        ImageIO.write(bufferedImage, "jpg", outputFile);
+    }
+
+    public ArrayList<Integer> get_all_types_id() throws ClassNotFoundException, SQLException {
+        ArrayList<Integer> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM types_of_products");
+            while (rs.next()) {
+                data.add(rs.getInt("id"));
+
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println(data);
+        return data;
+    }
+    public ArrayList<String> get_all_types() throws ClassNotFoundException, SQLException {
+        ArrayList<String> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM types_of_products");
+            while (rs.next()) {
+                data.add(rs.getString("vid"));
+
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println(data);
+        return data;
     }
 
     @RequestMapping("/data")

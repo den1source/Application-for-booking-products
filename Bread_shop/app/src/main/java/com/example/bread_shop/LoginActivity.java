@@ -107,60 +107,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void ValidateUser(final String phone, final String password) {
-
-
         check_post_data(phone, password);
 
-
-        /*final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(parentDbName).child(phone).exists())
-                {
-                    Users usersData = dataSnapshot.child(parentDbName).child(phone).getValue(Users.class);
-
-                    if(usersData.getPhone().equals(phone))
-                    {
-                        if(usersData.getPassword().equals(password))
-                        {
-                            if(parentDbName.equals("Users")){
-                                loadingBar.dismiss();
-                                Toast.makeText(LoginActivity.this, "Успешный вход!", Toast.LENGTH_SHORT).show();
-
-                                Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(homeIntent);
-                            }
-                            else if(parentDbName.equals("Admins")){
-                                loadingBar.dismiss();
-                                Toast.makeText(LoginActivity.this, "Успешный вход!", Toast.LENGTH_SHORT).show();
-
-                                Intent homeIntent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
-                                startActivity(homeIntent);
-                            }
-                        }
-                        else {
-                            loadingBar.dismiss();
-                            Toast.makeText(LoginActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-                else {
-                    loadingBar.dismiss();
-                    Toast.makeText(LoginActivity.this, "Аккаунт с номером " + phone + "не существует", Toast.LENGTH_SHORT).show();
-
-                    Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                    startActivity(registerIntent);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     public void check_post_data(String phone, String password) {
