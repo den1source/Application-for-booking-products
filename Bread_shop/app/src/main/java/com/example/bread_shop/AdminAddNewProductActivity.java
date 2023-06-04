@@ -38,7 +38,7 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
     private String categoryName, Description, Price, Pname, saveCurrentDate, saveCurrentTime, productRandomKey;
     private String downloadImageUrl;
     private ImageView productImage;
-    private EditText productName, productDescription, productPrice;
+    private EditText productName, product_time, productPrice;
     private Button addNewProductButton;
     private static final int GALLERYPICK = 1;
     private Uri ImageUri;
@@ -69,7 +69,7 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
     }
 
     private void ValidateProductData() {
-        Description = productDescription.getText().toString();
+        Description = product_time.getText().toString();
         Price = productPrice.getText().toString();
         Pname = productName.getText().toString();
 
