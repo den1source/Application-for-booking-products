@@ -1,8 +1,5 @@
 package com.example.bread_shop;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,34 +23,32 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
-public class AdminAddNewCategoryActivity extends AppCompatActivity {
-    private EditText name_category;
-    private Button add_image, post_new_category;
+public class AdminAddProductInput extends AppCompatActivity {
+
     private static final int REQUEST_SELECT_IMAGE = 1;
-    private byte[] image;
+    private byte[] image = null;
+    private Button add_image, post_new_product;
+    private EditText name, time, price;
     private ProgressDialog loadingBar;
 
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_add_new_category);
-        name_category=findViewById(R.id.name_cat);
+        setContentView(R.layout.activity_admin_add_new_product);
         loadingBar = new ProgressDialog(this);
+        name = findViewById(R.id.product_name);
+        time = findViewById(R.id.product_time);
+        price = findViewById(R.id.product_price);
     }
 
-    public void get_image(View v){
+    public void get_image(View v) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_SELECT_IMAGE);
     }
@@ -66,7 +63,7 @@ public class AdminAddNewCategoryActivity extends AppCompatActivity {
             // Например, можно передать его в функцию загрузки по байтам, как описано ранее
             byte[] imageBytes = loadImageBytesFromUri(selectedImageUri);
             if (imageBytes != null) {
-                image=imageBytes;
+                image = imageBytes;
             } else {
                 // Обработайте случай, когда изображение не удалось загрузить
             }
@@ -86,30 +83,59 @@ public class AdminAddNewCategoryActivity extends AppCompatActivity {
         return null;
     }
 
+    public static boolean isNumber(String input) {
+        try {
+            Integer.parseInt(input); // Пробуем преобразовать строку в число
+            return true; // Если преобразование прошло успешно, строка является числом
+        } catch (NumberFormatException e) {
+            return false; // Если произошла ошибка, строка не является числом
+        }
+    }
 
-    public void post_new_category(View v){
+    public static boolean isDouble(String input) {
+        try {
+            Double.parseDouble(input); // Пробуем преобразовать строку в число типа double
+            return true; // Если преобразование прошло успешно, строка является числом типа double
+        } catch (NumberFormatException e) {
+            return false; // Если произошла ошибка, строка не является числом типа double
+        }
+    }
+
+    public void post_new_category(View v) {
         loadingBar.setTitle("Обработка");
         loadingBar.setMessage("Пожалуйста, подождите...");
         loadingBar.setCanceledOnTouchOutside(false);
         loadingBar.show();
 
-        String name=name_category.getText().toString();
-        if(name.length()==0){
+        if (name.getText().toString().length() == 0) {
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Введите название категории", Toast.LENGTH_SHORT).show();
-        }
-        else if(image.length==0){
+            Toast.makeText(AdminAddProductInput.this, "Введите название категории", Toast.LENGTH_SHORT).show();
+        } if (image == null) {
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Выберите изображение", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAddProductInput.this, "Выберите изображение", Toast.LENGTH_SHORT).show();
+        } if (time.getText().toString().length() == 0) {
+            loadingBar.dismiss();
+            Toast.makeText(AdminAddProductInput.this, "Введите время приготовления блюда", Toast.LENGTH_SHORT).show();
+
+        } if (!isNumber(time.getText().toString())) {
+            loadingBar.dismiss();
+            Toast.makeText(AdminAddProductInput.this, "Введите время в цифрах!", Toast.LENGTH_SHORT).show();
+        } if (price.getText().toString().length() == 0) {
+            loadingBar.dismiss();
+            Toast.makeText(AdminAddProductInput.this, "Введите цену для данного товара", Toast.LENGTH_SHORT).show();
+
+        } if (!isDouble(price.getText().toString())){
+            loadingBar.dismiss();
+            Toast.makeText(AdminAddProductInput.this, "Введите цену в вещественных цифрах (34.4)!", Toast.LENGTH_SHORT).show();
         }
         else {
-            check_name(name);
+            check_name(name.getText().toString());
         }
     }
 
-    public void check_name(String name){
+    public void check_name(String name) {
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/type").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/product").newBuilder();
         urlBuilder.addQueryParameter("what_do", "check_name");
         urlBuilder.addQueryParameter("name", name);
         String url = urlBuilder.build().toString();
@@ -148,27 +174,30 @@ public class AdminAddNewCategoryActivity extends AppCompatActivity {
 
     public void get_res(String res, String name) throws IOException {
 
-        if(res.equals("false")){
+        if (res.equals("false")) {
 
-            uploadImage(image, name);
-        }
-        else {
+            uploadImage(image, name, price.getText().toString(), time.getText().toString());
+        } else {
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Данное имя уже существует", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAddProductInput.this, "Данное имя уже существует", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void uploadImage(byte[] imageBytes, String name) throws IOException {
-        if(name!=null){
+    public void uploadImage(byte[] imageBytes, String name, String price, String time) throws IOException {
+        if (name != null && price != null && time != null) {
+            AdminAddNewProductActivity add = new AdminAddNewProductActivity();
             OkHttpClient client = new OkHttpClient();
 
-            String imageUrl = "http://10.0.2.2:8080/download_image_type";
+            String imageUrl = "http://10.0.2.2:8080/download_image_product";
 
             MediaType mediaType = MediaType.parse("application/octet-stream");
             RequestBody requestBody = RequestBody.create(mediaType, imageBytes);
-
+            System.out.println("!!!!!!!!!!!!!!!!" + String.valueOf(add.getName_product()));
             HttpUrl.Builder urlBuilder = HttpUrl.parse(imageUrl).newBuilder();
-            urlBuilder.addQueryParameter("name", name); // Добавляем параметр "name"
+            urlBuilder.addQueryParameter("vid", String.valueOf(add.getName_product())); // Добавляем параметры
+            urlBuilder.addQueryParameter("name", name); // Добавляем параметры
+            urlBuilder.addQueryParameter("time", time);
+            urlBuilder.addQueryParameter("price", price);
 
             String url = urlBuilder.build().toString();
 
@@ -200,23 +229,23 @@ public class AdminAddNewCategoryActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-        }
-        else{
+        } else {
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Нет имени", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAddProductInput.this, "Нет имени", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void res(String res){
-        if(res.equals("true")) {
-            name_category.setText("");
-            image=null;
+    private void res(String res) {
+        if (res.equals("true")) {
+            name.setText("");
+            time.setText("");
+            price.setText("");
+            image = null;
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Успешно!", Toast.LENGTH_SHORT).show();
-        }
-        else {
+            Toast.makeText(AdminAddProductInput.this, "Успешно!", Toast.LENGTH_SHORT).show();
+        } else {
             loadingBar.dismiss();
-            Toast.makeText(AdminAddNewCategoryActivity.this, "Ошибка на сервере", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAddProductInput.this, "Ошибка на сервере", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,10 +1,11 @@
 package com.example.bread_shop;
-
+//
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class AdminDeleteCategoryActivity extends AppCompatActivity {
-
+public class AdminDeleteSelectedProduct extends AppCompatActivity {
     private ArrayList<Integer> ids = new ArrayList<>();
     private ArrayList<String> vids = new ArrayList<>();
+    private ArrayList<String> price=new ArrayList<>();
+    private ArrayList<String> time=new ArrayList<>();
+
     private List<String> selectedItems = new ArrayList<>();
     private ProgressDialog loadingBar;
     Button button_cancale;
@@ -54,9 +57,15 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
     private void getData() {
         ids.clear();
         vids.clear();
+        time.clear();
+        price.clear();
+
+        AdminDeleteProductActivity adm=new AdminDeleteProductActivity();
+
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/data").newBuilder();
-        urlBuilder.addQueryParameter("what_do", "gettypes");
+        urlBuilder.addQueryParameter("what_do", "number_of_products");
+        urlBuilder.addQueryParameter("num", String.valueOf(adm.getName_product()));
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()
@@ -95,11 +104,21 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
         Gson gson = new Gson();
         ArrayList<String> arrayList = gson.fromJson(responseData, new TypeToken<ArrayList<String>>() {
         }.getType());
-        for (int i = 0; i < arrayList.size(); i += 2) {
-            ids.add(Integer.valueOf(arrayList.get(i)));
-            vids.add(arrayList.get(i + 1));
+        if(arrayList.size()!=0){
+            for (int i = 0; i < arrayList.size(); i += 4) {
+                ids.add(Integer.valueOf(arrayList.get(i)));
+                vids.add(arrayList.get(i + 1));
+                price.add(arrayList.get(i + 2));
+                time.add(arrayList.get(i + 3));
+            }
+            start();
         }
-        start();
+        else {
+            Toast.makeText(AdminDeleteSelectedProduct.this, "Данная категория пуста(", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(AdminDeleteSelectedProduct.this,AdminDeleteProductActivity.class);
+            startActivityForResult(i, 0);
+        }
+
     }
 
     private void start() {
@@ -118,7 +137,7 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
                 String selectedItem = vids.get(position);
 
                 // Установите текст элемента списка
-                textView.setText(selectedItem);
+                textView.setText(vids.get(position)+"- "+price.get(position)+"₽,"+time.get(position)+"⏰");
 
                 // Проверьте, является ли элемент выбранным
                 boolean isSelected = selectedItems.contains(selectedItem);
@@ -154,20 +173,6 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
 
 
 
-
-    private void get_otvet(String res) {
-        loadingBar.dismiss();
-        if (res.equals("true")) {
-            selectedItems.clear();
-            getData();
-            Toast.makeText(AdminDeleteCategoryActivity.this, "Успешно!", Toast.LENGTH_SHORT).show();
-
-        } else {
-            Toast.makeText(AdminDeleteCategoryActivity.this, "Ошибка на сервере!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
     public void delete(View view) {
         loadingBar.setTitle("Обработка");
         loadingBar.setMessage("Пожалуйста, подождите...");
@@ -175,16 +180,17 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
         loadingBar.show();
 
         if (selectedItems.size() != 0) {
-            String s = "";
+            String name_ = "";
+            String id_="";
             for (String str : selectedItems) {
-                int index = vids.indexOf(str);
-                s += (ids.get(index) + ",");
+                name_+=(str+",");
+                id_+=(ids.get(vids.indexOf(str))+",");
             }
-            System.out.println(s);
             OkHttpClient client = new OkHttpClient();
-            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/type").newBuilder();
-            urlBuilder.addQueryParameter("what_do", "delete_type");
-            urlBuilder.addQueryParameter("str", s);
+            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://10.0.2.2:8080/product").newBuilder();
+            urlBuilder.addQueryParameter("what_do", "delete_product");
+            urlBuilder.addQueryParameter("str", name_);
+            urlBuilder.addQueryParameter("id", id_);
             String url = urlBuilder.build().toString();
 
             Request request = new Request.Builder()
@@ -215,7 +221,20 @@ public class AdminDeleteCategoryActivity extends AppCompatActivity {
 
         } else {
             loadingBar.dismiss();
-            Toast.makeText(AdminDeleteCategoryActivity.this, "Ничего не выбрано!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminDeleteSelectedProduct.this, "Ничего не выбрано!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void get_otvet(String res) {
+        loadingBar.dismiss();
+        System.out.println("11111111111"+res);
+        if (res.equals("true")) {
+            selectedItems.clear();
+            getData();
+            Toast.makeText(AdminDeleteSelectedProduct.this, "Успешно!", Toast.LENGTH_SHORT).show();
+
+        } else {
+            Toast.makeText(AdminDeleteSelectedProduct.this, "Ошибка на сервере!", Toast.LENGTH_SHORT).show();
         }
     }
 }

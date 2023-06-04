@@ -20,6 +20,11 @@
         android:theme="@style/Theme.Bread_shop"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name=".AdminDeleteSelectedProduct"
+            android:exported="false" />
+        <activity
+            android:name=".AdminAddProductInput"
+            android:exported="false" />
         <activity
             android:name=".AdminDeleteProductActivity"
             android:exported="false" />

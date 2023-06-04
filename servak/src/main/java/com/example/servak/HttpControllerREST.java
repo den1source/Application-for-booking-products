@@ -20,15 +20,15 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.lang.Integer.parseInt;
 
 @RestController
 public class HttpControllerREST extends HttpServlet {
 
-    @RequestMapping("/download_image")
+    @RequestMapping("/download_image_type")
     public String uploadImage(@RequestBody byte[] imageBytes, HttpServletRequest request) throws SQLException, ClassNotFoundException, IOException {
-        //bytesToImage(imageBytes, "Data/Images/Types/");
         int index = 0;
         ArrayList<Integer> arr = get_all_types_id();
         do {
@@ -37,8 +37,45 @@ public class HttpControllerREST extends HttpServlet {
             } else break;
         } while (true);
         bytesToImage(imageBytes, "Data/Images/Types/" + index + ".jpg");
-        //System.out.println(request.getParameter("name")+"!!!!!!!!!!!!!!!!!!!!!!!!");
         return String.valueOf(add_type(index, request.getParameter("name")));
+    }
+
+    @RequestMapping("/download_image_product")
+    public String uploadImage_(@RequestBody byte[] imageBytes, HttpServletRequest request) throws SQLException, ClassNotFoundException, IOException {
+        int index = 0;
+        ArrayList<Integer> arr = get_all_types_id_in_products();
+        do {
+            if (arr.contains(index)) {
+                index++;
+            } else break;
+        } while (true);
+        add_product(Integer.parseInt(request.getParameter("vid")), index, request.getParameter("name"), Double.parseDouble(request.getParameter("price")), Integer.parseInt(request.getParameter("time")));
+        return String.valueOf(bytesToImage(imageBytes, "Data/Images/Products/" + index + ".jpg"));
+    }
+
+    private boolean add_product(int vid, int index, String name, Double price, int time) throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            PreparedStatement pr_stmt = null;
+            String sql = "INSERT INTO table_of_products (ID,VID,TYPE,PRICE,TIME) VALUES (?,?,?,?,?)";
+            pr_stmt = c.prepareStatement(sql);
+            pr_stmt.setLong(1, index);
+            pr_stmt.setInt(2, vid);
+            pr_stmt.setString(3, name);
+            pr_stmt.setDouble(4, price);
+            pr_stmt.setInt(5, time);
+            pr_stmt.executeUpdate();
+            pr_stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.out.println("Ошибка во внесении данных в БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return true;
     }
 
     private boolean add_type(int index, String name) throws ClassNotFoundException, SQLException {
@@ -64,7 +101,7 @@ public class HttpControllerREST extends HttpServlet {
     }
 
     @RequestMapping("/type")
-    public boolean check_data(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+    public boolean check_data_types(HttpServletRequest request) throws SQLException, ClassNotFoundException {
         switch (request.getParameter("what_do")) {
             case "check_name":
                 return get_all_types().contains(request.getParameter("name"));
@@ -80,12 +117,37 @@ public class HttpControllerREST extends HttpServlet {
                 for (int i : numbersList) {
                     delete_file(i + ".jpg");
                 }
+                ArrayList<Integer> a = get_all_types_id_in_products();
+                if (a.size() != 0) {
+                    for (int i : a) {
+                        deleteProductsOfType(i);
+                    }
+                }
                 return true;
         }
         return false;
     }
 
-    private void delete_products_of_type(int id) throws ClassNotFoundException {
+    @RequestMapping("/product")
+    public boolean check_data_products(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        switch (request.getParameter("what_do")) {
+            case "check_name":
+                return get_all_products().contains(request.getParameter("name"));
+            case "delete_product":
+                String[] Array_name = request.getParameter("str").split(",");
+                String[] Array_id=request.getParameter("id").split(",");
+
+                deleteProduct(Array_name);
+                System.out.println(Arrays.toString(Array_id));
+                for (String str : Array_id) {
+                    delete_file_product(str+ ".jpg");
+                }
+                return true;
+        }
+        return false;
+    }
+
+    private void deleteProductsOfType(int id) throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
         Connection connection = null;
         PreparedStatement statement = null;
@@ -93,23 +155,47 @@ public class HttpControllerREST extends HttpServlet {
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
                     "denis21042", "JfWRQ5PG9iKn");
-            String query = "DELETE FROM types_of_products WHERE ID = ?";
+            String query = "DELETE FROM table_of_products WHERE ID = ?";
             statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            statement.executeUpdate();
 
-            for (int id : ids) {
-                statement.setInt(1, id);
-                statement.executeUpdate();
-            }
         } catch (SQLException e) {
             System.out.println("Ошибка во чтении данных из БД");
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
+
     private boolean delete_file(String imageName) {
         String directoryPath = "Data/Images/Types/"; // Путь к директории с изображениями
+        File directory = new File(directoryPath);
+        if (directory.exists()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && file.getName().equals(imageName)) {
+                        return file.delete();
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+        return false;
+    }
+
+    private boolean delete_file_product(String imageName) {
+        String directoryPath = "Data/Images/Products/"; // Путь к директории с изображениями
         File directory = new File(directoryPath);
         if (directory.exists()) {
             File[] files = directory.listFiles();
@@ -156,12 +242,39 @@ public class HttpControllerREST extends HttpServlet {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public static void bytesToImage(byte[] imageBytes, String outputPath) throws IOException {
+    public boolean bytesToImage(byte[] imageBytes, String outputPath) throws IOException {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
         BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
 
         File outputFile = new File(outputPath);
         ImageIO.write(bufferedImage, "jpg", outputFile);
+        return true;
+    }
+
+    public ArrayList<Integer> get_all_types_id_in_products() throws ClassNotFoundException, SQLException {
+        ArrayList<Integer> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products");
+            while (rs.next()) {
+                data.add(rs.getInt("id"));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println(data);
+        return data;
     }
 
     public ArrayList<Integer> get_all_types_id() throws ClassNotFoundException, SQLException {
@@ -293,6 +406,35 @@ public class HttpControllerREST extends HttpServlet {
         }
     }
 
+    private void deleteProduct(String[] str) throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                    "denis21042", "JfWRQ5PG9iKn");
+            String query = "DELETE FROM table_of_products WHERE TYPE = ?";
+            statement = connection.prepareStatement(query);
+
+            for (String id : str) {
+                statement.setString(1, id);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 
     @RequestMapping("/auth")
     public String index(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException {
@@ -350,6 +492,32 @@ public class HttpControllerREST extends HttpServlet {
             System.exit(0);
         }
         System.out.println(data);
+        return data;
+
+    }
+
+    private ArrayList<String> get_all_products() throws SQLException, ClassNotFoundException {
+        ArrayList<String> data = new ArrayList<>();
+
+        Class.forName("org.postgresql.Driver");
+        Connection c = DriverManager.getConnection("jdbc:postgresql://ep-shiny-recipe-198866.eu-central-1.aws.neon.tech/neondb",
+                "denis21042", "JfWRQ5PG9iKn");
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM table_of_products");
+            while (rs.next()) {
+                data.add(rs.getString("type"));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+        } catch (Exception e) {
+            System.out.println("Ошибка во чтении данных из БД");
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
         return data;
 
     }
