@@ -1,6 +1,5 @@
 package com.example.bread_shop;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.bread_shop.ui.Admin.AdminActivity;
 import com.rey.material.widget.CheckBox;
 
 import java.io.IOException;
@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivityForResult(i, 0);
                 }
                 else {
-                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
                     startActivityForResult(i, 0);
                 }
                 break;

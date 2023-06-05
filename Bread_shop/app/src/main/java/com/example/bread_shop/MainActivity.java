@@ -1,15 +1,13 @@
 package com.example.bread_shop;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import com.example.bread_shop.ui.Admin.AdminActivity;
 
 import java.util.Objects;
 
@@ -21,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Users")) {
-            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            Intent i = new Intent(MainActivity.this, UserHomeActivity.class);
             startActivityForResult(i, 0);
         }
         else if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Admins")) {

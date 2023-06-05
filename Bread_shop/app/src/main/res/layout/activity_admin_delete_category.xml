@@ -1,17 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background">
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="618dp" />
+        android:layout_height="580dp" />
 
     <Button
         android:id="@+id/button_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/button_cancale"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button"
         android:onClick="delete"
         android:text="Удалить" />
 
@@ -19,7 +23,10 @@
         android:id="@+id/button_cancale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/listView"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/button"
         android:onClick="delete_all_selected"
         android:text="Снять выбранное" />
 
-</LinearLayout>
+</RelativeLayout>
