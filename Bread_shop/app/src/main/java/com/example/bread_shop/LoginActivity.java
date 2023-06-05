@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.bread_shop.ui.Admin.AdminActivity;
+import com.example.bread_shop.AdminActivity;
 import com.rey.material.widget.CheckBox;
 
 import java.io.IOException;
