@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.bread_shop.AdminActivity;
+import com.example.bread_shop.ui.home.UserHomeActivity;
 
 import java.util.Objects;
 
@@ -18,11 +18,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Users")) {
+        if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "1Users")) {
             Intent i = new Intent(MainActivity.this, UserHomeActivity.class);
             startActivityForResult(i, 0);
         }
-        else if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "Admins")) {
+        else if (Objects.equals(UserDataManager.getSavedRole(MainActivity.this), "1Admins")) {
             Intent i = new Intent(MainActivity.this, AdminActivity.class);
             startActivityForResult(i, 0);
         }

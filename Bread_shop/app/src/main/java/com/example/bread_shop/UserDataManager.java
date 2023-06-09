@@ -18,6 +18,18 @@ public class UserDataManager {
         editor.apply();
     }
 
+    public static void saveUsername(Context context,String phone){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("name", phone);
+        editor.apply();
+    }
+
+    public static String getUsername(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("name", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("name", "");
+    }
+
     public static String getSavedRole(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_role, "");

@@ -7,26 +7,38 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="580dp" />
+        android:layout_height="580dp"
+        android:layout_above="@+id/button_cancale"
+        android:layout_marginBottom="15dp" />
 
     <Button
         android:id="@+id/button_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_cancale"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="delete"
-        android:text="Удалить" />
+        android:text="Удалить"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"/>
 
     <Button
         android:id="@+id/button_cancale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listView"
-        android:layout_marginTop="15dp"
+        android:layout_above="@+id/button_delete"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="delete_all_selected"
-        android:text="Снять выбранное" />
+        android:text="Снять выбранное"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"/>
 
 </RelativeLayout>

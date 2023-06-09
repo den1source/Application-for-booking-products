@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.bread_shop.AdminActivity;
+import com.example.bread_shop.ui.home.UserHomeActivity;
 import com.rey.material.widget.CheckBox;
 
 import java.io.IOException;
@@ -173,6 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivityForResult(i, 0);
                 }
                 else {
+                    UserDataManager.saveUsername(LoginActivity.this, phone);
                     Intent i = new Intent(LoginActivity.this, UserHomeActivity.class);
                     startActivityForResult(i, 0);
                 }

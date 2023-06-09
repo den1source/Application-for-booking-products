@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="1280px"
+        android:layout_height="720px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp" />
+
+    <Button
+        android:id="@+id/button_text"
+        android:layout_width="1280px"
+        android:layout_height="720px"
+        android:background="@android:color/transparent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:text=""
+        android:textSize="40dp" />
+
+</RelativeLayout>

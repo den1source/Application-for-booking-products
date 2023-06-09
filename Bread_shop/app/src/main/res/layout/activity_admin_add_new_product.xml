@@ -11,69 +11,72 @@
         android:id="@+id/product_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Наименование товара"
-        android:padding="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/input_design"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:hint="Наименование товара"
         android:inputType="textMultiLine"
-        />
+        android:padding="15dp"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/product_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/product_name"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/input_design"
         android:hint="Время приготовления в минутах"
         android:inputType="textMultiLine"
-        android:padding="10dp" />
+        android:padding="15dp"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/product_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/product_time"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/input_design"
         android:hint="Стоимость товара в рублях"
         android:inputType="textMultiLine"
-        android:padding="10dp" />
+        android:textSize="20sp"
+        android:padding="15dp" />
 
     <Button
         android:id="@+id/btn_add_new_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/product_price"
-        android:layout_marginTop="146dp"
+        android:layout_below="@+id/btn_add_image"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="post_new_category"
-        android:padding="20dp"
         android:text="Добавить товар"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
-        android:textStyle="italic|bold" />
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/btn_add_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/product_price"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="get_image"
-        android:padding="20dp"
         android:text="Добавить изображение"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
-        android:textStyle="italic|bold" />
+        android:textSize="20dp" />
 
 </RelativeLayout>

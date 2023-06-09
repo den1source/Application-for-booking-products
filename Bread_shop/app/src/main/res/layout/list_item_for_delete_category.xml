@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/background_cat_prod">
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -10,9 +11,10 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/netZakazov"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp" />
+        android:layout_margin="5dp"
+        android:textSize="20sp" />
 
 </LinearLayout>
