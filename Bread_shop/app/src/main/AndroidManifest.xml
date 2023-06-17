@@ -20,29 +20,45 @@
         android:theme="@style/Theme.Bread_shop"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".AdminDeleteSelectedProduct"
+        <activity android:name=".Statictika_for_admina"
+            android:exported="false" />
+        <activity android:name=".information_order"
+            android:exported="false" />
+        <activity android:name=".ui.account.order"
+            android:exported="false" />
+        <activity android:name=".all_info_about_order"
+            android:exported="false" />
+        <activity android:name=".make_oder"
+            android:exported="false" />
+        <activity android:name=".ui.korzina.Korzina"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.ProductUser"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDeleteSelectedProduct"
             android:exported="false" />
         <activity
             android:name=".AdminAddProductInput"
             android:exported="false" />
         <activity
-            android:name=".UserHomeActivity"
+            android:name=".ui.home.UserHomeActivity"
             android:exported="false"
             android:label="@string/title_activity_user_home" />
         <activity
-            android:name=".ui.Admin.AdminDeleteProductActivity"
+            android:name=".AdminDeleteProductActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Admin.AdminDeleteCategoryActivity"
+            android:name=".AdminDeleteCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Admin.AdminActivity"
+            android:name=".AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Admin.AdminAddNewCategoryActivity"
+            android:name=".AdminAddNewCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Admin.AdminAddNewProductActivity"
+            android:name=".AdminAddNewProductActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"

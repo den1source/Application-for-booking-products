@@ -124,14 +124,14 @@ public class AdminDeleteSelectedProduct extends AppCompatActivity {
     private void start() {
         ListView listView = findViewById(R.id.listView);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_for_delete_category, R.id.textView, vids) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_for_delete_category, R.id.netZakazov, vids) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
                 CheckBox checkBox = view.findViewById(R.id.checkBox);
-                TextView textView = view.findViewById(R.id.textView);
+                TextView textView = view.findViewById(R.id.netZakazov);
 
                 // Получите выбранный элемент из ArrayList данных
                 String selectedItem = vids.get(position);

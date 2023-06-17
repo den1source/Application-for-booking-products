@@ -6,6 +6,19 @@ SELECT * FROM table_of_users
 CREATE TABLE table_of_admins(ID INT PRIMARY KEY NOT NULL, LOGIN_OF_USER TEXT NOT NULL, PASSWORD_OF_USER TEXT NOT NULL);
 INSERT INTO table_of_admins(ID,LOGIN_OF_USER,PASSWORD_OF_USER) VALUES (0, 'adm0', '123');
 ================================
+#Таблица адресов
+CREATE TABLE name_street(ID INT PRIMARY KEY NOT NULL,Street TEXT NOT NULL);
+INSERT INTO name_street(ID,Street) VALUES(0,'Россия, г. Симферополь, Шоссейная ул., д. 8 кв.132');
+INSERT INTO name_street(ID,Street) VALUES(1,'Россия, г. Королёв, Интернациональная ул., д. 18 кв.204');
+INSERT INTO name_street(ID,Street) VALUES(2,'Россия, г. Новочеркасск, Гагарина ул., д. 7 кв.10');
+INSERT INTO name_street(ID,Street) VALUES(3,'Россия, г. Елец, Партизанская ул., д. 1 кв.146');
+================================
+#Таблица заказов
+CREATE TABLE orders(id_order bigint NOT NULL,Street INT NOT NULL REFERENCES name_street (id), id_user int not null REFERENCES table_of_users(id), TYPE INT NOT NULL REFERENCES types_of_products(id) , PRODUCT INT NOT NULL REFERENCES table_of_products(id), kol_vo int not null, summ float not null );
+================================
+#Статистика заказов
+CREATE TABLE data_of_order(id_user int not null REFERENCES table_of_users(id), id_order bigint NOT NULL, get_order boolean NOT NULL)
+================================
 #ТАБЛИЦА ВИДОВ ПРОДУКТОВ
 CREATE TABLE types_of_products(ID INT PRIMARY KEY NOT NULL,VID TEXT NOT NULL);
 INSERT INTO types_of_products(ID,VID) VALUES(0,'Хлеб');

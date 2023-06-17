@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".ui.Admin.AdminAddNewCategoryActivity">
+    tools:context=".AdminAddNewCategoryActivity">
 
     <EditText
         android:id="@+id/name_cat"
-        android:layout_width="300sp"
-        android:layout_height="50sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="200dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/input_design"
         android:hint=" Название категории"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="15dp"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/add_image"
-        android:layout_width="300sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/name_cat"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="get_image"
         android:text="Добавить изображение"
+        android:textSize="20dp"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_cat" />
 
     <Button
         android:id="@+id/add_categ"
-        android:layout_width="300sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_below="@+id/add_image"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/button"
         android:onClick="post_new_category"
         android:text="Добавить категорию"
+        android:textSize="20dp"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_image" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

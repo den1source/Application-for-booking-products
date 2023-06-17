@@ -1,7 +1,5 @@
 package com.example.bread_shop;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -102,13 +100,13 @@ public class AdminAddNewProductActivity extends AppCompatActivity {
     private void start() {
         ListView listView = findViewById(R.id.listView);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_for_add_product, R.id.textView, vids) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_for_add_product, R.id.netZakazov, vids) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
                 CheckBox checkBox = view.findViewById(R.id.checkBox);
-                TextView textView = view.findViewById(R.id.textView);
+                TextView textView = view.findViewById(R.id.netZakazov);
 
                 // Получите выбранный элемент из ArrayList данных
                 String selectedItem = vids.get(position);

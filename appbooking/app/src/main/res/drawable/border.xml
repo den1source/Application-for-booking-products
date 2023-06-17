@@ -1,7 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#00000000" /> <!-- Задает цвет фона (прозрачный) -->
-    <stroke
-        android:width="2dp"
-        android:color="#808080" /> <!-- Толщина границы (2dp) и серый цвет (#808080) -->
-    <corners android:radius="0dp" /> <!-- Задает радиус закругления углов (0dp для квадратных углов) -->
-</shape>
