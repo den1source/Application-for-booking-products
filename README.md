@@ -1,13 +1,15 @@
 # Application for booking products
  Приложение для бронирования продукции. 
 # Админ
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/58d3d1ec-0c3b-4327-9db9-b7fb85c858e0)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/09d1055e-193d-408c-8cf0-468f6cc0fdf4)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/efaf93f1-7be9-4f42-bfef-84695b9a907c)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/6134e736-4ba6-4666-9e38-44895a767c30)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/35f2e904-0729-4eeb-be8d-0b63e5b3bce6)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/6a7635b4-04db-4a62-85cf-79aecb30bc9c)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/ceb7a9b0-1a7f-44ba-b779-2221a78a5947)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/ff4612fe-0145-4f43-9911-c48c456b4c66)
+
 # Пользователь
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/19526530-15bf-4a34-a996-e0f894b2287e)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/1e94a234-54d5-4f15-9212-a951592b6029)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/f5a2b569-873b-45b2-bcf4-448a54a927c0)
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/58b2d53e-3aa6-49dd-97fb-b51008375ab2)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/c41a85d3-d09d-46b1-890d-6aae84dd52e5)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/f4f6e7a8-a0a2-4aeb-b051-7a4f45ca2b4e)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/4019022f-bdbc-4b03-8cef-00749c09c076)
+![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/d101d716-d91f-47fb-93e7-198b3328b6f1)
+
 
