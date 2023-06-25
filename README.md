@@ -12,6 +12,4 @@
 ![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/4019022f-bdbc-4b03-8cef-00749c09c076)
 ![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/d101d716-d91f-47fb-93e7-198b3328b6f1)
 
-#Итог:
-![image](https://github.com/den1source/Application-for-booking-products/assets/78921497/057269cf-0922-4174-8458-75ee1ae5c1ae)
 
